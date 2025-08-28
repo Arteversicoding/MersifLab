@@ -5,19 +5,18 @@ import { auth } from "./firebase-init.js";
 // Add this script to every page you want to protect.
 
 auth.onAuthStateChanged(function(user) {
-  console.log('Auth state changed. User:', user); // Log user object
+  const currentPath = window.location.pathname;
+  // If page name contains 'admin', require admin login page for unauthenticated users
+  const isAdminArea = currentPath.includes('admin-');
   if (!user) {
-    // User is not logged in, redirect to login page.
-    // We also check if we are already on the login or register page, to prevent an infinite redirect loop.
-    const currentPath = window.location.pathname;
-    console.log('Current path:', currentPath); // Log current path
-    if (currentPath !== '/login.html' && currentPath !== '/register.html') {
-      console.log('User not logged in and not on login/register page. Redirecting to login page.'); // Log redirect condition
-      window.location.href = '/login.html';
+    if (isAdminArea) {
+      if (!currentPath.endsWith('/admin-login.html')) {
+        window.location.href = '/admin-login.html';
+      }
     } else {
-      console.log('User not logged in, but already on login/register page. No redirect.');
+      if (currentPath !== '/login.html' && currentPath !== '/register.html') {
+        window.location.href = '/login.html';
+      }
     }
-  } else {
-    console.log('User is logged in. No redirect.');
   }
 });

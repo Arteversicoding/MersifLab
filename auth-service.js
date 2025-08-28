@@ -25,7 +25,8 @@ export class AuthService {
         this.adminEmails = [
             'admin@mi.com',
             'admin@moralintelligence.com',
-            'superadmin@mi.com'
+            'superadmin@mi.com',
+            'admin@mersiflab.com'
         ];
 
         onAuthStateChanged(this.auth, async (user) => {
@@ -130,6 +131,62 @@ export class AuthService {
             return { user: this.currentUser };
         } catch (error) {
             console.error("Login error:", error);
+            throw new Error(this.getFriendlyErrorMessage(error));
+        }
+    }
+
+    // Admin-only login: requires role 'admin' (via Firestore or admin email list)
+    async loginAdmin(email, password) {
+        try {
+            await setPersistence(this.auth, browserSessionPersistence);
+            
+            // Try to sign in first
+            let userCredential;
+            try {
+                userCredential = await signInWithEmailAndPassword(this.auth, email, password);
+            } catch (signInError) {
+                // If user doesn't exist and it's an admin email, create it
+                if (signInError.code === 'auth/user-not-found' || signInError.code === 'auth/invalid-credential') {
+                    if (this.isAdminEmail(email)) {
+                        console.log(`Admin user ${email} not found. Creating...`);
+                        await this.ensureAdminUserExists(email, password);
+                        // Try to sign in again after creation
+                        userCredential = await signInWithEmailAndPassword(this.auth, email, password);
+                    } else {
+                        throw signInError;
+                    }
+                } else {
+                    throw signInError;
+                }
+            }
+            
+            const user = userCredential.user;
+
+            const userDocRef = doc(db, "users", user.uid);
+            const userDoc = await getDoc(userDocRef);
+            const userData = userDoc.exists() ? userDoc.data() : {};
+
+            const isAdmin = this.isAdminEmail(user.email) || (userData.role === 'admin');
+            if (!isAdmin) {
+                await signOut(this.auth);
+                throw new Error('Akses admin ditolak. Akun ini bukan admin.');
+            }
+
+            this.currentUser = {
+                uid: user.uid,
+                email: user.email,
+                displayName: userData.firstName && userData.lastName ? `${userData.firstName} ${userData.lastName}` : (user.displayName || user.email),
+                photoURL: user.photoURL,
+                role: 'admin'
+            };
+            this.isAuthenticated = true;
+            return { user: this.currentUser };
+        } catch (error) {
+            console.error("Admin login error:", error);
+            // Pass through specific message if we threw above
+            if (typeof error?.message === 'string' && error.message.includes('Akses admin ditolak')) {
+                throw error;
+            }
             throw new Error(this.getFriendlyErrorMessage(error));
         }
     }

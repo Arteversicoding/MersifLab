@@ -241,6 +241,33 @@
             </div>
         </div>
 
+        <!-- Materials Manager -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h3 class="text-xl font-semibold text-gray-800 mb-6">Materials Manager</h3>
+
+            <!-- Upload Form -->
+            <form id="materialForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Judul</label>
+                    <input id="materialTitle" type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Masukkan judul materi" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+                    <input id="materialDesc" type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Deskripsi singkat" required>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <input id="materialFile" type="file" class="w-full text-sm">
+                    <input id="materialLink" type="url" placeholder="Atau tempelkan URL materi" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <div class="flex gap-2">
+                        <button type="button" id="uploadDriveBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">Simpan</button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- List -->
+            <div id="materialsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+
         <!-- Quick Actions -->
         <div class="bg-white rounded-xl shadow-lg p-6">
             <h3 class="text-xl font-semibold text-gray-800 mb-6">Quick Actions</h3>
@@ -273,17 +300,21 @@
     <!-- Scripts -->
     <script type="module" src="config.js"></script>
     <script type="module" src="auth-service.js"></script>
+    <script type="module" src="materials-service.js"></script>
+    <script type="module" src="drive-service.js"></script>
     <script type="module" src="gemini-service.js"></script>
     <script type="module" src="auth-service.js"></script>
     <script type="module"> // Added type="module" for imports
         import { AuthService } from './auth-service.js';
+        import { listenMaterialsRealtime, createMaterial, updateMaterial, deleteMaterial } from './materials-service.js';
+        import { uploadFileToDrive } from './drive-service.js';
         const authService = new AuthService();
 
         // Admin user creation removed - not needed since admin emails are handled automatically
 
         let geminiService; // authService is now imported directly
         let users = [];
-        let materials = { counseling: [], teaching: [] };
+        let materials = [];
 
         // const db = getFirestore(app); // Removed Firestore initialization
 
@@ -316,8 +347,8 @@
                 // Load users
                 await loadUsers();
                 
-                // Load materials (still from localStorage for now)
-                loadMaterials();
+                // Start realtime materials listener
+                listenToMaterials();
                 
                 // Update basic stats
                 updateStats();
@@ -336,9 +367,15 @@
             users = authService.users || []; // Get users directly from authService's local storage with fallback
         }
 
-        function loadMaterials() {
-            // Load from localStorage
-            const savedMaterials = localStorage.getItem('teacherMaterials');
+        function listenToMaterials() {
+            const listEl = document.getElementById('materialsList');
+            const unsubscribe = listenMaterialsRealtime((items) => {
+                materials = items;
+                updateStats();
+                listEl.innerHTML = items.map(renderMaterialCard).join('');
+                bindMaterialActions();
+            });
+            // store if needed: window._unsubMaterials = unsubscribe;
         }
 
         function updateStats() {
@@ -346,8 +383,7 @@
             document.getElementById('totalUsers').textContent = (users || []).length;
             
             // Update material count
-            const totalMaterials = (materials.counseling?.length || 0) + (materials.teaching?.length || 0);
-            document.getElementById('totalMaterials').textContent = totalMaterials;
+            document.getElementById('totalMaterials').textContent = (materials || []).length;
             
             // Update chat sessions (placeholder)
             document.getElementById('totalChats').textContent = Math.floor(Math.random() * 100) + 50;
@@ -553,6 +589,122 @@
                 notification.classList.add('translate-x-full');
             }, 3000);
         }
+
+        // ===== Materials UI Handlers =====
+        const form = document.getElementById('materialForm');
+        // Nonaktifkan submit form default agar tidak mencoba upload ke Storage
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showNotification('Gunakan tombol Simpan untuk menyimpan materi.', 'warning');
+        });
+
+        // Simpan: jika ada file -> upload ke Drive lalu simpan link, jika hanya URL -> simpan link saja
+        document.getElementById('uploadDriveBtn').addEventListener('click', async () => {
+            const title = document.getElementById('materialTitle').value.trim();
+            const description = document.getElementById('materialDesc').value.trim();
+            const fileInput = document.getElementById('materialFile');
+            const file = fileInput.files[0];
+            const linkUrl = document.getElementById('materialLink').value.trim();
+            if (!title || !description) {
+                showNotification('Isi judul dan deskripsi', 'warning');
+                return;
+            }
+            try {
+                let finalLink = linkUrl;
+                if (file) {
+                    const { directLink, webViewLink } = await uploadFileToDrive(file, {});
+                    finalLink = directLink || webViewLink;
+                }
+                if (!finalLink) {
+                    showNotification('Pilih file atau isi URL materi', 'warning');
+                    return;
+                }
+                await createMaterial({ title, description, file: null, linkUrl: finalLink });
+                form.reset();
+                showNotification('Materi disimpan', 'success');
+            } catch (e) {
+                console.error(e);
+                showNotification('Gagal menyimpan materi', 'error');
+            }
+        });
+
+        function renderMaterialCard(item) {
+            const dateStr = item.createdAt?.seconds ? new Date(item.createdAt.seconds * 1000).toLocaleString('id-ID') : '-';
+            const fileName = item.filePath ? item.filePath.split('/').pop() : '';
+            return `
+                <div class="border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h4 class="font-semibold text-gray-800">${item.title || 'Tanpa Judul'}</h4>
+                            <p class="text-sm text-gray-600 mt-1">${item.description || ''}</p>
+                            <p class="text-xs text-gray-400 mt-2">${dateStr}</p>
+                        </div>
+                        <div class="flex gap-2 ml-4">
+                            <button class="edit-material px-3 py-1 text-xs bg-blue-50 text-blue-600 rounded" data-id="${item.id}">Edit</button>
+                            <button class="delete-material px-3 py-1 text-xs bg-red-50 text-red-600 rounded" data-id="${item.id}" data-path="${item.filePath || ''}">Hapus</button>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-sm">
+                        ${item.fileUrl ? `<a class="text-indigo-600 hover:underline" href="${item.fileUrl}" target="_blank">Lihat / Unduh (${fileName})</a>` : (item.linkUrl ? `<a class="text-indigo-600 hover:underline" href="${item.linkUrl}" target="_blank">Buka Link</a>` : '<span class="text-gray-400">Tidak ada file/link</span>')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function bindMaterialActions() {
+            document.querySelectorAll('.edit-material').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = btn.getAttribute('data-id');
+                    const current = materials.find(m => m.id === id) || {};
+                    const newTitle = prompt('Edit judul materi:', current.title || '');
+                    if (newTitle === null) return;
+                    const newDesc = prompt('Edit deskripsi materi:', current.description || '');
+                    if (newDesc === null) return;
+                    let newFile = null;
+                    const newLink = prompt('Edit URL materi (opsional, kosongkan jika tidak diubah):', current.linkUrl || '');
+                    const wantChange = confirm('Ganti file juga?');
+                    if (wantChange) {
+                        // Create a hidden file input for selecting new file
+                        const input = document.createElement('input');
+                        input.type = 'file';
+                        input.accept = '*/*';
+                        input.click();
+                        await new Promise(resolve => {
+                            input.onchange = () => resolve();
+                        });
+                        newFile = input.files[0] || null;
+                    }
+                    try {
+                        await updateMaterial(id, { title: newTitle.trim(), description: newDesc.trim(), newFile, linkUrl: (newLink || '').trim() });
+                        showNotification('Materi berhasil diperbarui', 'success');
+                    } catch (e) {
+                        console.error(e);
+                        showNotification('Gagal memperbarui materi', 'error');
+                    }
+                });
+            });
+            document.querySelectorAll('.delete-material').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    if (!confirm('Hapus materi ini?')) return;
+                    const id = btn.getAttribute('data-id');
+                    const path = btn.getAttribute('data-path');
+                    try {
+                        await deleteMaterial(id, path);
+                        showNotification('Materi dihapus', 'success');
+                    } catch (e) {
+                        console.error(e);
+                        showNotification('Gagal menghapus materi', 'error');
+                    }
+                });
+            });
+        }
+
+        // Expose functions for inline onclick buttons
+        window.exportData = exportData;
+        window.exportSurveyData = exportSurveyData;
+        window.clearAllData = clearAllData;
+        window.refreshStats = refreshStats;
+        window.logout = logout;
     </script>
 </body>
 </html>

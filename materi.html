@@ -3,6 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="bg-white shadow">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <a href="index.html" class="text-xl font-semibold text-indigo-600"><i class="fas fa-book mr-2"></i>Materi</a>
+            <a href="admin-dashboard.html" class="text-sm text-gray-600 hover:text-indigo-600">Admin</a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Daftar Materi</h1>
+        <div id="materialsPublicList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </main>
+
+    <script type="module" src="config.js"></script>
+    <script type="module" src="firebase-init.js"></script>
+    <script type="module" src="materials-service.js"></script>
+    <script type="module">
+        import { listenMaterialsRealtime } from './materials-service.js';
+        const listEl = document.getElementById('materialsPublicList');
+        function card(item) {
+            const dateStr = item.createdAt?.seconds ? new Date(item.createdAt.seconds * 1000).toLocaleString('id-ID') : '-';
+            const fileName = item.filePath ? item.filePath.split('/').pop() : '';
+            return `
+                <div class="border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
+                    <h3 class="font-semibold text-gray-800">${item.title || 'Tanpa Judul'}</h3>
+                    <p class="text-sm text-gray-600 mt-1">${item.description || ''}</p>
+                    <p class="text-xs text-gray-400 mt-2">${dateStr}</p>
+                    <div class="mt-3 text-sm">
+                        ${item.fileUrl ? `<a class=\"text-indigo-600 hover:underline\" href=\"${item.fileUrl}\" target=\"_blank\">Lihat / Unduh (${fileName})</a>` : (item.linkUrl ? `<a class=\"text-indigo-600 hover:underline\" href=\"${item.linkUrl}\" target=\"_blank\">Buka Link</a>` : '<span class=\"text-gray-400\">Tidak ada file/link</span>')}
+                    </div>
+                </div>
+            `;
+        }
+        listenMaterialsRealtime((items) => {
+            listEl.innerHTML = items.map(card).join('');
+        });
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Materi - Moral Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
