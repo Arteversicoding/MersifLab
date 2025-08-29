@@ -18,4 +18,4 @@ jobs:
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MI_APP_8FF5C }}
-          projectId: mi-app-8ff5c
+          projectId: mersiflab-63b3c
