@@ -1,7 +1,7 @@
 {
-  "name": "moral-intelligence",
+  "name": "mersiflab",
   "version": "1.0.0",
-  "description": "Platform panduan bijak untuk pendidik dengan AI Gemini",
+  "description": "Platform pembelajaran teknologi dan inovasi dengan AI Gemini",
   "main": "index.html",
   "scripts": {
     "start": "live-server",
@@ -10,14 +10,16 @@
     "test": "echo 'No tests specified'"
   },
   "keywords": [
-    "education",
+    "technology",
     "ai",
+    "iot",
+    "vr",
+    "stem",
     "gemini",
-    "moral-intelligence",
-    "teacher-tools",
-    "counseling"
+    "lms",
+    "innovation"
   ],
-  "author": "Moral Intelligence Team",
+  "author": "Mersiflab Team",
   "license": "MIT",
   "devDependencies": {
     "live-server": "^1.2.2"
@@ -28,10 +30,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/moral-intelligence.git"
+    "url": "https://github.com/your-username/mersiflab.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/moral-intelligence/issues"
+    "url": "https://github.com/your-username/mersiflab/issues"
   },
-  "homepage": "https://moral-intelligence.web.app"
+  "homepage": "https://mersiflab.web.app"
 }

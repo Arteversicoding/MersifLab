@@ -11,11 +11,17 @@ auth.onAuthStateChanged(function(user) {
   if (!user) {
     if (isAdminArea) {
       if (!currentPath.endsWith('/login.html')) {
-                window.location.href = '/login.html';
+        window.location.href = '/login.html';
+      }
     } else {
       if (currentPath !== '/login.html' && currentPath !== '/register.html') {
         window.location.href = '/login.html';
       }
+    }
+  } else {
+    // User is authenticated, redirect to appropriate dashboard if on login/register
+    if (currentPath === '/login.html' || currentPath === '/register.html') {
+      window.location.href = '/index.html';
     }
   }
 });

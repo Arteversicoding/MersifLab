@@ -3,38 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil - Moral Intelligence</title>
+    <title>Profil - Mersiflab</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .nav-button.active { color: #4f46e5; /* Indigo-600 */ }
+        .nav-button.active { color: #00a2e1; /* Mersiflab Blue */ }
     </style>
     <script type="module" src="auth-guard.js"></script>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-100">
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-100">
 
     <!-- Main App Container -->
     <div id="app-container" class="pb-24">
         <!-- Profile Header -->
-        <div class="bg-gradient-to-r from-pink-500 via-rose-500 to-red-500 text-white p-6 rounded-b-3xl shadow-xl">
+        <div class="bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 text-white p-6 rounded-b-3xl shadow-xl">
             <div class="flex items-center space-x-4">
                 <div id="profile-avatar" class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center text-4xl">👤</div>
                 <div class="flex-1">
                     <h2 id="profile-name" class="text-2xl font-bold">Loading...</h2>
-                    <p id="profile-profession" class="text-pink-200">Loading...</p>
+                    <p id="profile-profession" class="text-cyan-200">Loading...</p>
                 </div>
-                <button class="bg-white/20 hover:bg-white/30 p-2 rounded-full transition-colors">
+                <a href="edit-profile.html" class="bg-white/20 hover:bg-white/30 p-2 rounded-full transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
-                </button>
+                </a>
             </div>
         </div>
 
         <div class="p-6 space-y-6">
             <!-- Account Stats -->
             <div class="grid grid-cols-3 gap-4 text-center">
-                <div><p class="text-xl font-bold text-gray-800">28</p><p class="text-sm text-gray-500">Post Forum</p></div>
-                <div><p class="text-xl font-bold text-gray-800">15</p><p class="text-sm text-gray-500">Materi Selesai</p></div>
+                <div><p class="text-xl font-bold text-gray-800">28</p><p class="text-sm text-gray-500">Tech Posts</p></div>
+                <div><p class="text-xl font-bold text-gray-800">15</p><p class="text-sm text-gray-500">Courses Done</p></div>
                 <div><p class="text-xl font-bold text-gray-800">4.8 ⭐</p><p class="text-sm text-gray-500">Rating</p></div>
             </div>
 
@@ -159,7 +159,7 @@
                     if (userData.profession) {
                         document.getElementById('profile-profession').textContent = userData.profession;
                     } else {
-                        document.getElementById('profile-profession').textContent = 'Pendidik';
+                        document.getElementById('profile-profession').textContent = 'Tech Learner';
                     }
                     
                     // Update avatar
@@ -183,7 +183,7 @@
                 console.error('Error updating user profile:', error);
                 // Fallback values
                 document.getElementById('profile-name').textContent = 'User';
-                document.getElementById('profile-profession').textContent = 'Pendidik';
+                document.getElementById('profile-profession').textContent = 'Tech Learner';
             }
         }
     </script>

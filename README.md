@@ -1,91 +1,50 @@
-# Moral Intelligence - Platform Panduan Bijak untuk Pendidik
+# Mersiflab - Platform Pembelajaran Teknologi & Inovasi
 
-## 📖 Deskripsi
+## Deskripsi
 
-Moral Intelligence adalah platform web yang dirancang khusus untuk membantu guru, konselor, dan orang tua dalam mengatasi tantangan mendidik remaja. Platform ini menggunakan teknologi AI (Gemini) untuk memberikan saran dan konsultasi yang relevan dan praktis.
+Mersiflab adalah platform LMS (Learning Management System) yang berfokus pada pembelajaran teknologi dan inovasi. Platform ini menggunakan teknologi AI (Gemini) untuk membantu pengguna mempelajari AI, IoT, VR, Karya Ilmiah, dan STEM dengan pendekatan interaktif dan modern.
 
-## ✨ Fitur Utama
+## Fitur Utama
 
-### 🔐 Sistem Autentikasi
-- **Login/Register**: Sistem autentikasi yang aman dengan validasi
-- **Session Management**: Manajemen sesi dengan timeout otomatis
-- **Role-based Access**: Diferensiasi akses untuk admin dan user
-- **Profile Management**: Pengelolaan profil pengguna yang lengkap
+### Sistem Autentikasi
+- Login/Register: Sistem autentikasi yang aman dengan validasi
+- Session Management: Manajemen sesi dengan timeout otomatis
+- Role-based Access: Diferensiasi akses untuk admin dan user
+- Profile Management: Pengelolaan profil pengguna yang lengkap
 
-### 🤖 AI Chat dengan Gemini
-- **Konsultasi Real-time**: Chat langsung dengan AI untuk mendapatkan saran
-- **Context Awareness**: AI memahami konteks percakapan sebelumnya
-- **Fallback System**: Sistem cadangan jika API tidak tersedia
-- **Quick Suggestions**: Saran pertanyaan cepat untuk topik umum
-- **Materi-Based Responses**: AI hanya menjawab berdasarkan materi yang tersedia
-- **Konteks Konseling & Pembelajaran**: Diferensiasi konteks untuk konseling dan pembelajaran
+### AI Assistant dengan Gemini
+- Tech Support Real-time: Chat langsung dengan AI untuk bantuan teknologi
+- Context Awareness: AI memahami konteks percakapan sebelumnya
+- Fallback System: Sistem cadangan jika API tidak tersedia
+- Quick Tech Questions: Saran pertanyaan cepat untuk topik teknologi
+- Material-Based Responses: AI menjawab berdasarkan materi teknologi yang tersedia
+- STEM Learning Context: Fokus pada pembelajaran STEM dan teknologi
 
-### 💬 Forum Komunitas
-- **Diskusi Interaktif**: Platform berbagi pengalaman antar pendidik
-- **Kategori Terorganisir**: Pengelompokan berdasarkan topik (bullying, motivasi, dll)
-- **Search & Filter**: Pencarian dan filter yang mudah digunakan
-- **Like & Comment**: Sistem interaksi sosial
+### Tech Forum Komunitas
+- Diskusi Teknologi: Platform berbagi pengetahuan antar tech enthusiast
+- Kategori Terorganisir: Pengelompokan berdasarkan topik (AI, IoT, VR, STEM)
+- Search & Filter: Pencarian dan filter yang mudah digunakan
+- Like & Comment: Sistem interaksi sosial untuk komunitas tech
 
-### 📚 Pusat Materi
-- **Materi Terstruktur**: Konten pembelajaran yang terorganisir
-- **Progress Tracking**: Pelacakan kemajuan belajar
-- **Search Functionality**: Pencarian materi yang cepat
-- **Responsive Design**: Tampilan yang optimal di semua device
+### Learning Materials Center
+- Tech Materials: Konten pembelajaran teknologi yang terstruktur
+- Progress Tracking: Pelacakan kemajuan belajar teknologi
+- Search Functionality: Pencarian materi teknologi yang cepat
+- Responsive Design: Tampilan yang optimal di semua device
 
-### 🤖 Chat AI dengan Materi
-- **Upload PDF**: Upload file PDF materi yang akan dipahami AI
-- **Input Link**: Masukkan link website materi untuk diproses AI
-- **Embedding Otomatis**: AI menggunakan Gemini embedding-001 untuk memahami materi
-- **Chat Kontekstual**: AI menjawab berdasarkan materi yang diupload
-- **Semantic Search**: Pencarian materi berdasarkan kemiripan makna
+### AI-Powered Learning
+- Upload Tech Materials: Upload PDF materi teknologi untuk dipahami AI
+- Input Tech Links: Masukkan link website teknologi untuk diproses AI
+- Embedding Otomatis: AI menggunakan Gemini embedding-001 untuk memahami materi
+- Contextual Tech Chat: AI menjawab berdasarkan materi teknologi yang diupload
+- Semantic Search: Pencarian materi berdasarkan kemiripan makna teknologi
 
-### 🔧 Admin Dashboard
-- **System Overview**: Statistik pengguna, materi, dan aktivitas sistem
-- **System Health**: Status AI, storage, dan performa sistem
-- **Quick Actions**: Export data, clear data, dan refresh statistik
-- **Simple Interface**: Dashboard sederhana untuk monitoring sistem
+### Admin Dashboard
+- System Overview: Statistik pengguna, materi, dan aktivitas sistem
+- System Health: Status AI, storage, dan performa sistem
+- Quick Actions: Export data, clear data, dan refresh statistik
 
-### 🎨 UI/UX Modern
-- **Responsive Design**: Optimal di desktop, tablet, dan mobile
-- **Tailwind CSS**: Framework CSS modern untuk styling
-- **Smooth Animations**: Transisi dan animasi yang halus
-- **Dark/Light Mode Ready**: Siap untuk implementasi tema
-
-## 🚀 Teknologi yang Digunakan
-
-### Frontend
-- **HTML5**: Struktur halaman yang semantik
-- **CSS3**: Styling modern dengan Tailwind CSS
-- **JavaScript ES6+**: Logika aplikasi yang modern
-- **Responsive Design**: Mobile-first approach
-
-### AI Integration
-- **Google Gemini API**: AI model untuk chat dan konsultasi
-- **Fallback System**: Sistem cadangan untuk respons AI
-- **Context Management**: Pengelolaan konteks percakapan
-
-### Storage
-- **LocalStorage**: Penyimpanan data sementara di browser
-- **Session Management**: Manajemen sesi pengguna
-- **Data Persistence**: Penyimpanan data yang persisten
-
-## 📁 Struktur File
-
-```
-MI/
-├── index.html              # Halaman utama aplikasi
-├── login.html              # Halaman login
-├── register.html           # Halaman registrasi
-├── chat.html               # Halaman chat AI
-├── materi-guru.html        # Halaman kelola materi guru
-├── admin-dashboard.html    # Dashboard admin
-├── config.js               # Konfigurasi aplikasi
-├── auth-service.js         # Service autentikasi
-├── gemini-service.js       # Service AI Gemini
-└── README.md               # Dokumentasi ini
-```
-
-## 🔧 Instalasi & Setup
+## Instalasi & Setup
 
 ### 1. Clone Repository
 ```bash
@@ -128,77 +87,53 @@ firebase init hosting
 firebase deploy
 ```
 
-## 🎯 Cara Kerja AI dengan Materi
+## Cara Kerja AI dengan Materi Teknologi
 
 ### 1. Upload & Embedding
-- Guru dapat upload PDF atau input link materi
-- AI menggunakan **Gemini embedding-001** untuk memahami konten
+- Pengguna dapat upload PDF atau input link materi teknologi
+- AI menggunakan **Gemini embedding-001** untuk memahami konten teknologi
 - Materi diproses dan disimpan dengan embeddings untuk pencarian cepat
 
-### 2. Chat Kontekstual
-- AI menganalisis pertanyaan dan mencari materi yang relevan
+### 2. Tech-Focused Chat
+- AI menganalisis pertanyaan teknologi dan mencari materi yang relevan
 - Menggunakan **semantic search** berdasarkan kemiripan makna
-- AI hanya menjawab berdasarkan materi yang tersedia
+- AI fokus menjawab pertanyaan seputar AI, IoT, VR, dan STEM
 
 ### 3. Model AI
 - **Chat**: Gemini 1.5 Flash untuk respons yang cepat dan akurat
 - **Embedding**: Gemini embedding-001 untuk pemahaman materi
 - **Fallback**: Sistem cadangan jika API tidak tersedia
 
-## 🔑 Kredensial Demo
+## Kredensial Demo
 
 ### Admin Account
-- **Email**: admin@mi.com
+- **Email**: admin@mersiflab.com
 - **Password**: admin123
 - **Access**: Full admin dashboard, user management, system settings
 
 ### User Account
-- **Email**: user@mi.com
+- **Email**: user@mersiflab.com
 - **Password**: user123
-- **Access**: Basic user features, chat AI, materi upload
+- **Access**: Basic user features, AI assistant, tech materials upload
 
-## 📱 Fitur Responsif
+## Fitur Responsif
 
 - **Mobile-First Design**: Optimal untuk perangkat mobile
 - **Touch-Friendly**: Interface yang mudah digunakan dengan touch
 - **Adaptive Layout**: Layout yang menyesuaikan ukuran layar
 - **Progressive Web App Ready**: Siap untuk dijadikan PWA
 
-## 🔒 Keamanan
-
-- **Input Validation**: Validasi input yang ketat
-- **Session Timeout**: Timeout otomatis untuk keamanan
-- **XSS Prevention**: Pencegahan cross-site scripting
-- **Secure Storage**: Penyimpanan data yang aman
-
-## 🚧 Fitur yang Akan Datang
-
-- [ ] **Firebase Integration**: Database dan hosting
-- [ ] **Real-time Chat**: Chat antar pengguna
-- [ ] **File Upload**: Upload materi dan dokumen
-- [ ] **Push Notifications**: Notifikasi real-time
-- [ ] **Analytics Dashboard**: Dashboard analitik untuk admin
-- [ ] **Multi-language Support**: Dukungan multi bahasa
-
-## 🤝 Kontribusi
-
-1. Fork repository
-2. Buat feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push ke branch (`git push origin feature/AmazingFeature`)
-5. Buat Pull Request
-
-## 📄 Lisensi
+## Lisensi
 
 Proyek ini dilisensikan di bawah MIT License - lihat file [LICENSE](LICENSE) untuk detail.
 
-## 📞 Kontak
+## Kontak
 
-- **Email**: support@moralintelligence.com
-- **Website**: https://moralintelligence.com
-- **Documentation**: https://docs.moralintelligence.com
+- **Email**: support@mersiflab.com
+- **Website**: https://mersiflab.com
+- **Documentation**: https://docs.mersiflab.com
 
-## 🙏 Ucapan Terima Kasih
+## Ucapan Terima Kasih
 
 - **Google Gemini AI** untuk teknologi AI yang powerful
 - **Tailwind CSS** untuk framework CSS yang luar biasa
@@ -207,4 +142,4 @@ Proyek ini dilisensikan di bawah MIT License - lihat file [LICENSE](LICENSE) unt
 
 ---
 
-**Moral Intelligence** - Membantu pendidik membangun masa depan yang lebih baik melalui teknologi AI yang cerdas dan empatik. 🚀 
+**Mersiflab** - Platform pembelajaran teknologi masa depan yang mengintegrasikan AI, IoT, VR, dan STEM untuk menciptakan generasi inovator. 🚀 

@@ -56,6 +56,12 @@ export class AuthService {
                 
                 // Save current user to localStorage for non-Firebase pages
                 localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+                
+                // Don't redirect if user is on edit-profile page
+                const currentPath = window.location.pathname;
+                if (currentPath === '/login.html' || currentPath === '/register.html') {
+                    window.location.href = '/index.html';
+                }
             } else {
                 this.currentUser = null;
                 this.isAuthenticated = false;

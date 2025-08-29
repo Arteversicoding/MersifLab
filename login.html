@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Moral Intelligence</title>
+    <title>Login - Mersiflab</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient-bg { background: linear-gradient(135deg, #00a2e1 0%, #0ea5e9 100%); }
         .loading-spinner {
             border: 2px solid #f3f3f3;
-            border-top: 2px solid #667eea;
+            border-top: 2px solid #00a2e1;
             border-radius: 50%;
             width: 20px;
             height: 20px;
@@ -23,14 +23,16 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-100 flex items-center justify-center p-4">
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-100 flex items-center justify-center p-4">
     <div class="w-full max-w-md">
         <!-- Logo & Title -->
         <div class="text-center mb-8">
-            <div class="w-20 h-20 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span class="text-3xl text-white">🧠</span>
+            <div class="w-32 h-20 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg p-3">
+                <img src="assets/logo.png" 
+                     alt="Mersiflab Logo" 
+                     class="w-full h-full object-contain">
             </div>
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">Moral Intelligence</h1>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Mersiflab</h1>
             <p class="text-gray-600">Masuk ke akun Anda</p>
         </div>
 
@@ -40,27 +42,27 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                     <input type="email" id="email" required 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                            placeholder="Masukkan email Anda">
                 </div>
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
                     <input type="password" id="password" required 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                            placeholder="Masukkan password Anda">
                 </div>
 
                 <div class="flex items-center justify-between">
                     <label class="flex items-center">
-                        <input type="checkbox" id="rememberMe" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <input type="checkbox" id="rememberMe" class="rounded border-gray-300 text-cyan-600 focus:ring-cyan-500">
                         <span class="ml-2 text-sm text-gray-600">Ingat saya</span>
                     </label>
-                    <a href="#" class="text-sm text-indigo-600 hover:text-indigo-500">Lupa password?</a>
+                    <a href="#" class="text-sm text-cyan-600 hover:text-cyan-500">Lupa password?</a>
                 </div>
 
                 <button type="submit" id="loginButton"
-                        class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-xl font-medium hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center">
+                        class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-3 px-4 rounded-xl font-medium hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center">
                     <span id="loginButtonText">Masuk</span>
                     <div id="loginSpinner" class="loading-spinner ml-2 hidden"></div>
                 </button>
@@ -89,9 +91,9 @@
             </div>
 
             <div class="mt-6 text-center">
-                <p class="text-gray-600">Belum punya akun? 
-                    <a href="register.html" class="text-indigo-600 hover:text-indigo-500 font-medium">Daftar di sini</a>
-                </p>
+                <p class="text-center text-gray-600 mt-6">
+                Belum punya akun? <a href="register.html" class="text-cyan-600 hover:text-cyan-500 font-medium">Daftar di sini</a>
+            </p>
             </div>
         </div>
 

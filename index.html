@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beranda - Moral Intelligence</title>
+    <title>Beranda - Mersiflab</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -14,35 +14,35 @@
         .slide-inactive-left { transform: translateX(-100%); }
         .slide-inactive-right { transform: translateX(100%); }
         .hover-scale:hover { transform: scale(1.03); }
-        .nav-button.active { color: #4f46e5; /* Indigo-600 */ }
+        .nav-button.active { color: #00a2e1; /* Mersiflab Blue */ }
     </style>
     <script type="module" src="auth-guard.js"></script>
     <script type="module" src="auth-service.js"></script>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-100">
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-100">
 
     <!-- Main App Container -->
     <div id="app-container" class="pb-24">
         <!-- Header -->
-        <div class="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 text-white p-6 rounded-b-3xl shadow-xl">
+        <div class="bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 text-white p-6 rounded-b-3xl shadow-xl">
             <div class="flex items-center justify-between mb-4">
                 <div>
-                    <h1 class="text-2xl font-bold mb-1">Moral Intelligence</h1>
-                    <p class="text-indigo-100 text-sm">Panduan bijak menghadapi remaja</p>
+                    <h1 class="text-2xl font-bold mb-1">Mersiflab</h1>
+                    <p class="text-cyan-100 text-sm">Platform Pembelajaran Teknologi & Inovasi</p>
                 </div>
                 <div class="relative">
                     <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M14 9V5a3 3 0 0 0-6 0v4"/><rect x="2" y="9" width="20" height="12" rx="2" ry="2"/></svg>
                     </div>
-                    <div class="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-indigo-700"></div>
+                    <div class="absolute -top-1 -right-1 w-4 h-4 bg-blue-400 rounded-full border-2 border-cyan-700"></div>
                 </div>
             </div>
             
             <!-- Quick Stats -->
             <div class="grid grid-cols-3 gap-4">
-                <div class="text-center"><p class="text-2xl font-bold">127</p><p class="text-indigo-200 text-xs">Hari Aktif</p></div>
-                <div class="text-center"><p class="text-2xl font-bold">23</p><p class="text-indigo-200 text-xs">Kasus Solved</p></div>
-                <div class="text-center"><p class="text-2xl font-bold">4.8</p><p class="text-indigo-200 text-xs">Rating</p></div>
+                <div class="text-center"><p class="text-2xl font-bold">127</p><p class="text-cyan-200 text-xs">Hari Aktif</p></div>
+                <div class="text-center"><p class="text-2xl font-bold">45</p><p class="text-cyan-200 text-xs">Proyek Selesai</p></div>
+                <div class="text-center"><p class="text-2xl font-bold">4.9</p><p class="text-cyan-200 text-xs">Rating</p></div>
             </div>
         </div>
 
@@ -58,12 +58,12 @@
             </div>
 
             <!-- Profile Card -->
-            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg">
+            <div class="bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg">
                 <div class="flex items-center space-x-4">
                     <div id="user-avatar" class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-3xl">👤</div>
                     <div class="flex-1">
                         <h3 id="user-name" class="text-xl font-bold">Loading...</h3>
-                        <p id="user-profession" class="text-indigo-200 text-sm">Loading...</p>
+                        <p id="user-profession" class="text-cyan-200 text-sm">Loading...</p>
                         <div class="flex items-center space-x-4 mt-2">
                             <div class="text-xs"><span class="font-semibold">Email:</span> <span id="user-email">Loading...</span></div>
                             <div class="text-xs"><span class="font-semibold">Role:</span> <span id="user-role">Loading...</span></div>
@@ -79,36 +79,36 @@
             <div class="grid grid-cols-2 gap-4">
                 <a href="chat.html" class="bg-gradient-to-br from-blue-400 to-cyan-500 rounded-2xl p-6 text-white shadow-lg hover-scale transition-all duration-300 text-center">
                     <div class="bg-white/20 rounded-full p-3 mx-auto mb-3 w-fit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-                    <h3 class="font-bold text-sm">Chat AI</h3>
-                    <p class="text-blue-100 text-xs">Konsultasi cepat</p>
+                    <h3 class="font-bold text-sm">AI Assistant</h3>
+                    <p class="text-blue-100 text-xs">Bantuan teknologi</p>
                 </a>
-                <a href="forum.html" class="bg-gradient-to-br from-green-400 to-emerald-500 rounded-2xl p-6 text-white shadow-lg hover-scale transition-all duration-300 text-center">
+                <a href="forum.html" class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg hover-scale transition-all duration-300 text-center">
                     <div class="bg-white/20 rounded-full p-3 mx-auto mb-3 w-fit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-                    <h3 class="font-bold text-sm">Forum</h3>
-                    <p class="text-green-100 text-xs">Diskusi komunitas</p>
+                    <h3 class="font-bold text-sm">Tech Forum</h3>
+                    <p class="text-blue-100 text-xs">Diskusi teknologi</p>
                 </a>
             </div>
 
             <!-- News & Updates -->
             <div class="bg-white rounded-2xl p-6 shadow-lg">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-bold text-gray-800">📰 Berita & Update</h3>
-                    <button class="text-indigo-600 text-sm font-medium">Lihat Semua</button>
+                    <h3 class="text-lg font-bold text-gray-800">🚀 Tech News & Update</h3>
+                    <button class="text-cyan-600 text-sm font-medium">Lihat Semua</button>
                 </div>
                 <div class="space-y-4">
                     <div class="flex items-start space-x-4 p-3 bg-gray-50 rounded-xl">
-                        <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full flex items-center justify-center text-white text-sm font-bold">ED</div>
+                        <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full flex items-center justify-center text-white text-sm font-bold">AI</div>
                         <div>
-                            <h4 class="font-semibold text-gray-800 text-sm">Edukasi Plus</h4>
-                            <p class="text-gray-600 text-xs mb-1">Strategi baru menghadapi bullying di sekolah</p>
+                            <h4 class="font-semibold text-gray-800 text-sm">AI Innovation</h4>
+                            <p class="text-gray-600 text-xs mb-1">ChatGPT-4 dan dampaknya pada pembelajaran STEM</p>
                             <span class="text-gray-400 text-xs">2 jam lalu</span>
                         </div>
                     </div>
                     <div class="flex items-start space-x-4 p-3 bg-gray-50 rounded-xl">
-                        <div class="w-12 h-12 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center text-white text-sm font-bold">PS</div>
+                        <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold">IoT</div>
                         <div>
-                            <h4 class="font-semibold text-gray-800 text-sm">Psikologi Sekolah</h4>
-                            <p class="text-gray-600 text-xs mb-1">Workshop mengelola emosi remaja</p>
+                            <h4 class="font-semibold text-gray-800 text-sm">IoT Workshop</h4>
+                            <p class="text-gray-600 text-xs mb-1">Membangun smart home dengan Arduino dan Raspberry Pi</p>
                             <span class="text-gray-400 text-xs">5 jam lalu</span>
                         </div>
                     </div>
@@ -149,9 +149,9 @@
         let slideInterval;
 
         const slideData = [
-            { bg: 'from-orange-400 to-red-500', title: 'Diskon 50% Materi Premium', text: 'Akses semua konten eksklusif', icon: '🎓' },
-            { bg: 'from-green-400 to-emerald-500', title: 'Webinar Gratis', text: 'Strategi menghadapi remaja zaman now', icon: '📚' },
-            { bg: 'from-purple-400 to-pink-500', title: 'Konsultasi 1-on-1', text: 'Dengan ahli psikologi remaja', icon: '👨‍⚕️' }
+            { bg: 'from-blue-500 to-blue-600', title: 'Kursus AI & Machine Learning', text: 'Pelajari teknologi masa depan', icon: '🤖' },
+            { bg: 'from-cyan-500 to-blue-500', title: 'Workshop IoT Gratis', text: 'Bangun proyek Internet of Things', icon: '🔧' },
+            { bg: 'from-indigo-500 to-blue-600', title: 'VR Development Lab', text: 'Eksplorasi dunia Virtual Reality', icon: '🥽' }
         ];
 
         function initializeSlideshow() {
@@ -292,7 +292,7 @@
                     if (userData.profession) {
                         document.getElementById('user-profession').textContent = userData.profession;
                     } else {
-                        document.getElementById('user-profession').textContent = 'Pendidik';
+                        document.getElementById('user-profession').textContent = 'Tech Learner';
                     }
                     
                     // Update avatar
@@ -311,7 +311,7 @@
                     document.getElementById('user-name').textContent = 'Guest';
                     document.getElementById('user-email').textContent = 'Not logged in';
                     document.getElementById('user-role').textContent = 'guest';
-                    document.getElementById('user-profession').textContent = 'Visitor';
+                    document.getElementById('user-profession').textContent = 'Tech Explorer';
                     document.getElementById('user-avatar').textContent = '👤';
                 }
             } catch (error) {
@@ -320,7 +320,7 @@
                 document.getElementById('user-name').textContent = 'User';
                 document.getElementById('user-email').textContent = 'Error loading';
                 document.getElementById('user-role').textContent = 'user';
-                document.getElementById('user-profession').textContent = 'Pendidik';
+                document.getElementById('user-profession').textContent = 'Tech Learner';
             }
         }
     </script>
