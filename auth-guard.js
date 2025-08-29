@@ -10,9 +10,8 @@ auth.onAuthStateChanged(function(user) {
   const isAdminArea = currentPath.includes('admin-');
   if (!user) {
     if (isAdminArea) {
-      if (!currentPath.endsWith('/admin-login.html')) {
-        window.location.href = '/admin-login.html';
-      }
+      if (!currentPath.endsWith('/login.html')) {
+                window.location.href = '/login.html';
     } else {
       if (currentPath !== '/login.html' && currentPath !== '/register.html') {
         window.location.href = '/login.html';

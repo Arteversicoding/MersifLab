@@ -3,55 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Materi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-50 min-h-screen">
-    <nav class="bg-white shadow">
-        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="index.html" class="text-xl font-semibold text-indigo-600"><i class="fas fa-book mr-2"></i>Materi</a>
-            <a href="admin-dashboard.html" class="text-sm text-gray-600 hover:text-indigo-600">Admin</a>
-        </div>
-    </nav>
-
-    <main class="max-w-6xl mx-auto px-4 py-8">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Daftar Materi</h1>
-        <div id="materialsPublicList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-    </main>
-
-    <script type="module" src="config.js"></script>
-    <script type="module" src="firebase-init.js"></script>
-    <script type="module" src="materials-service.js"></script>
-    <script type="module">
-        import { listenMaterialsRealtime } from './materials-service.js';
-        const listEl = document.getElementById('materialsPublicList');
-        function card(item) {
-            const dateStr = item.createdAt?.seconds ? new Date(item.createdAt.seconds * 1000).toLocaleString('id-ID') : '-';
-            const fileName = item.filePath ? item.filePath.split('/').pop() : '';
-            return `
-                <div class="border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
-                    <h3 class="font-semibold text-gray-800">${item.title || 'Tanpa Judul'}</h3>
-                    <p class="text-sm text-gray-600 mt-1">${item.description || ''}</p>
-                    <p class="text-xs text-gray-400 mt-2">${dateStr}</p>
-                    <div class="mt-3 text-sm">
-                        ${item.fileUrl ? `<a class=\"text-indigo-600 hover:underline\" href=\"${item.fileUrl}\" target=\"_blank\">Lihat / Unduh (${fileName})</a>` : (item.linkUrl ? `<a class=\"text-indigo-600 hover:underline\" href=\"${item.linkUrl}\" target=\"_blank\">Buka Link</a>` : '<span class=\"text-gray-400\">Tidak ada file/link</span>')}
-                    </div>
-                </div>
-            `;
-        }
-        listenMaterialsRealtime((items) => {
-            listEl.innerHTML = items.map(card).join('');
-        });
-    </script>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Materi - Moral Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -59,7 +10,6 @@
         body { font-family: 'Inter', sans-serif; }
         .nav-button.active { color: #4f46e5; /* Indigo-600 */ }
     </style>
-    <script type="module" src="auth-guard.js"></script>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-100">
 
@@ -89,37 +39,10 @@
             </div>
             
             <!-- Materi List -->
-            <div id="materi-list" class="space-y-4">
+            <div id="materi-list-container" class="space-y-4">
                 <h3 class="text-lg font-bold text-gray-800">📚 Semua Materi</h3>
-                <!-- Material Item 1 -->
-                <div class="bg-white rounded-2xl p-5 shadow-lg">
-                    <div class="flex items-start space-x-4">
-                        <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-xl flex items-center justify-center text-white flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-800 mb-1">Pengantar Moral Intelligence</h4>
-                            <p class="text-gray-600 text-sm mb-2">Memahami konsep dasar kecerdasan moral.</p>
-                            <div class="flex space-x-3 text-xs text-gray-500">
-                                <span>⏱️ 30 min</span><span>📈 Beginner</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Material Item 2 -->
-                <div class="bg-white rounded-2xl p-5 shadow-lg">
-                    <div class="flex items-start space-x-4">
-                        <div class="w-12 h-12 bg-gradient-to-r from-green-400 to-emerald-500 rounded-xl flex items-center justify-center text-white flex-shrink-0">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-800 mb-1">Teknik Komunikasi Assertif</h4>
-                            <p class="text-gray-600 text-sm mb-2">Cara berkomunikasi yang efektif dengan siswa.</p>
-                            <div class="flex space-x-3 text-xs text-gray-500">
-                                <span>⏱️ 25 min</span><span>📈 Intermediate</span>
-                            </div>
-                        </div>
-                    </div>
+                <div id="materi-list" class="space-y-4">
+                    <!-- Dynamic content will be loaded here -->
                 </div>
             </div>
         </div>
@@ -140,7 +63,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 <span class="text-xs font-medium">Forum</span>
             </a>
-            <a href="materi.html" data-page="materi" class="nav-button flex flex-col items-center space-y-1 text-gray-500">
+            <a href="materi.html" data-page="materi" class="nav-button flex flex-col items-center space-y-1 text-gray-500 active">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
                 <span class="text-xs font-medium">Materi</span>
             </a>
@@ -150,17 +73,63 @@
             </a>
         </div>
     </div>
+    
+    <script type="module" src="firebase-init.js"></script>
+    <script type="module">
+        import { listenMaterialsRealtime } from './materials-service.js';
 
-    <script>
-        function setActiveNav() {
-            document.querySelectorAll('.nav-button').forEach(button => {
-                if (button.dataset.page === 'materi') {
-                    button.classList.add('active');
+        const listEl = document.getElementById('materi-list');
+
+        function createCard(item) {
+            const downloadUrl = item.fileUrl || item.linkUrl;
+            const hasDownload = !!downloadUrl;
+
+            return `
+                <div class="bg-white rounded-2xl p-5 shadow-lg transition-transform hover:scale-[1.02]">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-xl flex items-center justify-center text-white flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                        </div>
+                        <div class="flex-grow">
+                            <h4 class="font-semibold text-gray-800 mb-1">${item.title || 'Tanpa Judul'}</h4>
+                            <p class="text-gray-600 text-sm mb-3">${item.description || 'Tidak ada deskripsi.'}</p>
+                            ${hasDownload ?
+                                `<a href="${downloadUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-full sm:w-auto bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                    Download Materi
+                                </a>` :
+                                '<p class="text-sm text-gray-400">Tidak ada file untuk diunduh.</p>'
+                            }
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            listenMaterialsRealtime((items) => {
+                if (items && items.length > 0) {
+                    listEl.innerHTML = items.map(createCard).join('');
+                } else {
+                    listEl.innerHTML = '<p class="text-center text-gray-500">Belum ada materi yang tersedia.</p>';
                 }
             });
-        }
-        document.addEventListener('DOMContentLoaded', setActiveNav);
+
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const allCards = listEl.querySelectorAll('.bg-white');
+                allCards.forEach(card => {
+                    const title = card.querySelector('h4').textContent.toLowerCase();
+                    const description = card.querySelector('p').textContent.toLowerCase();
+                    if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
     </script>
-    <script src="materi-search.js" defer></script>
 </body>
 </html>

@@ -10,12 +10,3 @@ export const firebaseConfig = {
 
 export const geminiApiKey = "AIzaSyAkIyXZk5Xk36eG4hrQ0aKlRlkg6B5gaw8";
 
-// Google Drive API config (fill these from Google Cloud Console)
-export const googleDriveConfig = {
-  apiKey: "", // e.g. AI... from Google Cloud Console
-  clientId: "", // e.g. 1234567890-xxxxxxxx.apps.googleusercontent.com
-  scope: "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.metadata",
-  discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
-  // Optional: upload target folder ID; leave empty to upload to root
-  folderId: ""
-};

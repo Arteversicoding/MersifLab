@@ -6,6 +6,8 @@
     <title>Admin Dashboard - Moral Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
     <style>
         .stat-card {
             transition: all 0.3s ease;
@@ -102,145 +104,6 @@
             </div>
         </div>
 
-        <!-- Survey Analytics Section -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h2 class="text-xl font-bold text-gray-800 mb-4">📊 Survey Analytics</h2>
-            
-            <!-- Rating Statistics -->
-            <div class="mb-6">
-                <h3 class="text-lg font-semibold text-gray-700 mb-3">Rating Averages (1-10)</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="bg-blue-50 p-4 rounded-lg">
-                        <h4 class="text-sm font-medium text-blue-600 mb-1">Text Readability</h4>
-                        <p class="text-2xl font-bold text-blue-700" id="readabilityAvg">-</p>
-                        <p class="text-xs text-blue-500">Average /10</p>
-                    </div>
-                    <div class="bg-green-50 p-4 rounded-lg">
-                        <h4 class="text-sm font-medium text-green-600 mb-1">Color & Layout</h4>
-                        <p class="text-2xl font-bold text-green-700" id="colorAvg">-</p>
-                        <p class="text-xs text-green-500">Average /10</p>
-                    </div>
-                    <div class="bg-purple-50 p-4 rounded-lg">
-                        <h4 class="text-sm font-medium text-purple-600 mb-1">Design Appeal</h4>
-                        <p class="text-2xl font-bold text-purple-700" id="designAvg">-</p>
-                        <p class="text-xs text-purple-500">Average /10</p>
-                    </div>
-                    <div class="bg-orange-50 p-4 rounded-lg">
-                        <h4 class="text-sm font-medium text-orange-600 mb-1">Cross Platform</h4>
-                        <p class="text-2xl font-bold text-orange-700" id="platformAvg">-</p>
-                        <p class="text-xs text-orange-500">Average /10</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Additional Ratings -->
-            <div class="mb-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-indigo-50 p-4 rounded-lg">
-                        <h4 class="text-sm font-medium text-indigo-600 mb-1">Ease of Use</h4>
-                        <p class="text-2xl font-bold text-indigo-700" id="usabilityAvg">-</p>
-                        <p class="text-xs text-indigo-500">Average /10</p>
-                    </div>
-                    <div class="bg-pink-50 p-4 rounded-lg">
-                        <h4 class="text-sm font-medium text-pink-600 mb-1">Chatbot Relevance</h4>
-                        <p class="text-2xl font-bold text-pink-700" id="chatbotAvg">-</p>
-                        <p class="text-xs text-pink-500">Average /10</p>
-                    </div>
-                    <div class="bg-teal-50 p-4 rounded-lg">
-                        <h4 class="text-sm font-medium text-teal-600 mb-1">Media Support</h4>
-                        <p class="text-2xl font-bold text-teal-700" id="mediaAvg">-</p>
-                        <p class="text-xs text-teal-500">Average /10</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- System Info -->
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-            <h3 class="text-xl font-semibold text-gray-800 mb-6">System Information</h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-gray-50 rounded-lg p-4">
-                    <h4 class="font-medium text-gray-700 mb-3">AI Status</h4>
-                    <div class="space-y-2">
-                        <div class="flex justify-between">
-                            <span class="text-sm text-gray-600">Gemini API:</span>
-                            <span class="text-sm font-medium text-green-600" id="aiStatus">Connected</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-sm text-gray-600">Last Update:</span>
-                            <span class="text-sm text-gray-500" id="lastUpdate">-</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-gray-50 rounded-lg p-4">
-                    <h4 class="font-medium text-gray-700 mb-3">System Health</h4>
-                    <div class="space-y-2">
-                        <div class="flex justify-between">
-                            <span class="text-sm text-gray-600">Storage:</span>
-                            <span class="text-sm font-medium text-green-600">Healthy</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-sm text-gray-600">Performance:</span>
-                            <span class="text-sm font-medium text-green-600">Optimal</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Usage Statistics -->
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-            <h3 class="text-xl font-semibold text-gray-800 mb-6">Usage Statistics</h3>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Device Usage -->
-                <div>
-                    <h4 class="text-lg font-semibold text-gray-700 mb-3">Device Usage</h4>
-                    <div class="grid grid-cols-3 gap-3">
-                        <div class="bg-gray-50 p-4 rounded-lg text-center">
-                            <div class="text-2xl mb-2">💻</div>
-                            <p class="text-lg font-bold text-gray-700" id="webUsers">0</p>
-                            <p class="text-sm text-gray-500">Web Users</p>
-                        </div>
-                        <div class="bg-gray-50 p-4 rounded-lg text-center">
-                            <div class="text-2xl mb-2">📱</div>
-                            <p class="text-lg font-bold text-gray-700" id="androidUsers">0</p>
-                            <p class="text-sm text-gray-500">Android Users</p>
-                        </div>
-                        <div class="bg-gray-50 p-4 rounded-lg text-center">
-                            <div class="text-2xl mb-2">🍎</div>
-                            <p class="text-lg font-bold text-gray-700" id="iosUsers">0</p>
-                            <p class="text-sm text-gray-500">iOS Users</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Feature Usage -->
-                <div>
-                    <h4 class="text-lg font-semibold text-gray-700 mb-3">Popular Features</h4>
-                    <div class="grid grid-cols-3 gap-3">
-                        <div class="bg-blue-50 p-4 rounded-lg text-center">
-                            <div class="text-2xl mb-2">🤖</div>
-                            <p class="text-lg font-bold text-blue-700" id="chatbotUsers">0</p>
-                            <p class="text-sm text-blue-500">Chatbot AI</p>
-                        </div>
-                        <div class="bg-green-50 p-4 rounded-lg text-center">
-                            <div class="text-2xl mb-2">📚</div>
-                            <p class="text-lg font-bold text-green-700" id="materiUsers">0</p>
-                            <p class="text-sm text-green-500">Learning Materials</p>
-                        </div>
-                        <div class="bg-purple-50 p-4 rounded-lg text-center">
-                            <div class="text-2xl mb-2">💬</div>
-                            <p class="text-lg font-bold text-purple-700" id="forumUsers">0</p>
-                            <p class="text-sm text-purple-500">Forum Community</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Materials Manager -->
         <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
             <h3 class="text-xl font-semibold text-gray-800 mb-6">Materials Manager</h3>
@@ -259,7 +122,9 @@
                     <input id="materialFile" type="file" class="w-full text-sm">
                     <input id="materialLink" type="url" placeholder="Atau tempelkan URL materi" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     <div class="flex gap-2">
-                        <button type="button" id="uploadDriveBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">Simpan</button>
+                        <button type="submit" id="saveMaterialBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50">
+Simpan
+</button>
                     </div>
                 </div>
             </form>
@@ -279,9 +144,6 @@
                 <button onclick="exportSurveyData()" class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors">
                     <i class="fas fa-chart-line mr-2"></i>Export Survey Data
                 </button>
-                <button onclick="clearAllData()" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors">
-                    <i class="fas fa-trash mr-2"></i>Clear All Data
-                </button>
                 <button onclick="refreshStats()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
                     <i class="fas fa-refresh mr-2"></i>Refresh Stats
                 </button>
@@ -298,412 +160,149 @@
     </div>
 
     <!-- Scripts -->
-    <script type="module" src="config.js"></script>
-    <script type="module" src="auth-service.js"></script>
-    <script type="module" src="materials-service.js"></script>
-    <script type="module" src="drive-service.js"></script>
-    <script type="module" src="gemini-service.js"></script>
-    <script type="module" src="auth-service.js"></script>
-    <script type="module"> // Added type="module" for imports
+    <script type="module">
+        // Konfigurasi Supabase
+        const SUPABASE_URL = "https://zlcislycukayjgjhozjy.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpsY2lzbHljdWtheWpnamhvemp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzOTcyNTcsImV4cCI6MjA3MTk3MzI1N30.XF_hxADjk1azFH3PfqK1i_edNlFLwPeZuzXvPmAx4XM";
+        const BUCKET = "upload";
+
+        // Import services dan Supabase client
+        const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
         import { AuthService } from './auth-service.js';
         import { listenMaterialsRealtime, createMaterial, updateMaterial, deleteMaterial } from './materials-service.js';
-        import { uploadFileToDrive } from './drive-service.js';
+
+        // Inisialisasi
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
         const authService = new AuthService();
 
-        // Admin user creation removed - not needed since admin emails are handled automatically
-
-        let geminiService; // authService is now imported directly
-        let users = [];
-        let materials = [];
-
-        // const db = getFirestore(app); // Removed Firestore initialization
-
-        document.addEventListener('DOMContentLoaded', async () => {
+        // Fungsi untuk upload file ke Supabase Storage
+        async function uploadFileToSupabase(file, title, description) {
             try {
-                // Initialize services
-                // authService is now imported directly
-                // geminiService = new GeminiService(); // Removed - not needed for admin dashboard
-                // await geminiService.initialize();
-
-                // Wait for auth initialization to get proper user data
-                const currentUser = await authService.waitForAuthInit();
+                const fileExt = file.name.split('.').pop();
                 
-                if (!currentUser || currentUser.role !== 'admin') {
-                    window.location.href = 'index.html';
-                    return;
+                // Sanitize title and description to create a friendly filename
+                const sanitize = (str) => str.toLowerCase()
+                    .replace(/\s+/g, '-') // Replace spaces with -
+                    .replace(/[^\w\-]+/g, '') // Remove all non-word chars
+                    .replace(/\-\-+/g, '-') // Replace multiple - with single -
+                    .replace(/^-+/, '') // Trim - from start of text
+                    .replace(/-+$/, ''); // Trim - from end of text
+
+                const baseName = `${sanitize(title)}-${sanitize(description)}`;
+                // Add a timestamp to ensure uniqueness
+                const fileName = `${baseName.substring(0, 100)}_${Date.now()}.${fileExt}`;
+
+                const { data, error } = await supabase.storage
+                    .from(BUCKET)
+                    .upload(fileName, file);
+
+                if (error) {
+                    throw error;
                 }
 
-                // Load data
-                loadDashboardData();
+                // Get public URL
+                const { data: { publicUrl } } = supabase.storage
+                    .from(BUCKET)
+                    .getPublicUrl(fileName);
+
+                if (!publicUrl) {
+                    throw new Error('Gagal mendapatkan URL publik untuk file yang diunggah.');
+                }
                 
+                return {
+                    success: true,
+                    fileName: fileName,
+                    publicUrl: publicUrl,
+                    fullData: data
+                };
             } catch (error) {
-                console.error('Initialization error:', error);
-                showNotification('Terjadi kesalahan saat inisialisasi', 'error');
+                console.error('Upload error:', error);
+                // Re-throw the error to be caught by the caller
+                throw error;
+            }
+        }
+
+        // Handler untuk form simpan materi
+        document.getElementById("materialForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const saveBtn = document.getElementById("saveMaterialBtn");
+            const title = document.getElementById("materialTitle").value.trim();
+            const description = document.getElementById("materialDesc").value.trim();
+            const fileInput = document.getElementById("materialFile");
+            const file = fileInput.files[0];
+            const linkUrl = document.getElementById("materialLink").value.trim();
+
+            // Disable button to prevent multiple submissions
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
+
+            if (!title || !description) {
+                showNotification("❌ Judul & Deskripsi wajib diisi!", "error");
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = 'Simpan';
+                return;
+            }
+
+            if (!file && !linkUrl) {
+                showNotification("❌ Pilih file ATAU masukkan link!", "error");
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = 'Simpan';
+                return;
+            }
+
+            try {
+                let finalLink = linkUrl;
+                if (file) {
+                    // Pass title and description for filename generation
+                    const uploadResult = await uploadFileToSupabase(file, title, description);
+                    finalLink = uploadResult.publicUrl;
+                }
+
+                await createMaterial({ title, description, linkUrl: finalLink });
+                showNotification("✅ Materi berhasil disimpan!", "success");
+                document.getElementById("materialForm").reset();
+
+            } catch (err) {
+                console.error("Gagal menyimpan materi:", err);
+                showNotification(`❌ Gagal simpan materi: ${err.message}`, "error");
+            } finally {
+                // Re-enable button
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = 'Simpan';
             }
         });
 
-        async function loadDashboardData() {
-            try {
-                // Load users
-                await loadUsers();
-                
-                // Start realtime materials listener
-                listenToMaterials();
-                
-                // Update basic stats
-                updateStats();
-                
-                // Load survey data from localStorage
-                await loadSurveyAnalytics();
-                
-                // Update system info
-                updateSystemInfo();
-            } catch (error) {
-                console.error('Error loading dashboard data:', error);
-            }
-        }
-
-        async function loadUsers() {
-            users = authService.users || []; // Get users directly from authService's local storage with fallback
-        }
-
-        function listenToMaterials() {
-            const listEl = document.getElementById('materialsList');
-            const unsubscribe = listenMaterialsRealtime((items) => {
-                materials = items;
-                updateStats();
-                listEl.innerHTML = items.map(renderMaterialCard).join('');
-                bindMaterialActions();
-            });
-            // store if needed: window._unsubMaterials = unsubscribe;
-        }
-
-        function updateStats() {
-            // Update user count
-            document.getElementById('totalUsers').textContent = (users || []).length;
-            
-            // Update material count
-            document.getElementById('totalMaterials').textContent = (materials || []).length;
-            
-            // Update chat sessions (placeholder)
-            document.getElementById('totalChats').textContent = Math.floor(Math.random() * 100) + 50;
-            
-            // Update survey responses count
-            const surveyData = JSON.parse(localStorage.getItem('surveyResponses') || '[]');
-            document.getElementById('surveyResponses').textContent = surveyData.length;
-        }
-
-        function updateSystemInfo() {
-            // Update last update time
-            document.getElementById('lastUpdate').textContent = new Date().toLocaleString('id-ID');
-            
-            // Set AI status as connected (since we removed GeminiService dependency)
-            document.getElementById('aiStatus').textContent = 'Connected';
-            document.getElementById('aiStatus').className = 'text-sm font-medium text-green-600';
-        }
-
-        // Load survey analytics
-        async function loadSurveyAnalytics() {
-            try {
-                const surveyData = JSON.parse(localStorage.getItem('surveyResponses') || '[]');
-
-                if (surveyData.length === 0) {
-                    // Set default values when no survey data
-                    document.getElementById('readabilityAvg').textContent = '-';
-                    document.getElementById('colorAvg').textContent = '-';
-                    document.getElementById('designAvg').textContent = '-';
-                    document.getElementById('platformAvg').textContent = '-';
-                    document.getElementById('usabilityAvg').textContent = '-';
-                    document.getElementById('chatbotAvg').textContent = '-';
-                    document.getElementById('mediaAvg').textContent = '-';
-                    
-                    document.getElementById('webUsers').textContent = '0';
-                    document.getElementById('androidUsers').textContent = '0';
-                    document.getElementById('iosUsers').textContent = '0';
-                    
-                    document.getElementById('chatbotUsers').textContent = '0';
-                    document.getElementById('materiUsers').textContent = '0';
-                    document.getElementById('forumUsers').textContent = '0';
-                    return;
-                }
-
-                // Calculate rating averages
-                const ratings = {
-                    textReadability: [],
-                    colorLayout: [],
-                    attractiveDesign: [],
-                    crossPlatform: [],
-                    easeOfUse: [],
-                    chatbotRelevance: [],
-                    mediaSupport: []
-                };
-
-                const deviceUsage = { web: 0, android: 0, ios: 0 };
-                const featureUsage = { chatbot: 0, materi: 0, forum: 0 };
-
-                surveyData.forEach(survey => {
-                    // Collect ratings from the survey structure
-                    if (survey.ratings) {
-                        ratings.textReadability.push(survey.ratings.textReadability || 0);
-                        ratings.colorLayout.push(survey.ratings.colorLayout || 0);
-                        ratings.attractiveDesign.push(survey.ratings.attractiveDesign || 0);
-                        ratings.crossPlatform.push(survey.ratings.crossPlatform || 0);
-                        ratings.easeOfUse.push(survey.ratings.easeOfUse || 0);
-                        ratings.chatbotRelevance.push(survey.ratings.chatbotRelevance || 0);
-                        ratings.mediaSupport.push(survey.ratings.mediaSupport || 0);
-                    }
-
-                    // Count device usage
-                    if (survey.deviceUsed) {
-                        if (survey.deviceUsed.includes('Web')) deviceUsage.web++;
-                        if (survey.deviceUsed.includes('Android')) deviceUsage.android++;
-                        if (survey.deviceUsed.includes('iOS')) deviceUsage.ios++;
-                    }
-
-                    // Count feature usage
-                    if (survey.featuresUsed) {
-                        if (survey.featuresUsed.includes('Chatbot AI')) featureUsage.chatbot++;
-                        if (survey.featuresUsed.includes('Materi Pembelajaran')) featureUsage.materi++;
-                        if (survey.featuresUsed.includes('Forum Komunitas')) featureUsage.forum++;
-                    }
-                });
-
-                // Calculate and display averages
-                const calcAvg = (arr) => arr.length > 0 ? (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1) : '-';
-                
-                document.getElementById('readabilityAvg').textContent = calcAvg(ratings.textReadability);
-                document.getElementById('colorAvg').textContent = calcAvg(ratings.colorLayout);
-                document.getElementById('designAvg').textContent = calcAvg(ratings.attractiveDesign);
-                document.getElementById('platformAvg').textContent = calcAvg(ratings.crossPlatform);
-                document.getElementById('usabilityAvg').textContent = calcAvg(ratings.easeOfUse);
-                document.getElementById('chatbotAvg').textContent = calcAvg(ratings.chatbotRelevance);
-                document.getElementById('mediaAvg').textContent = calcAvg(ratings.mediaSupport);
-
-                // Update device usage
-                document.getElementById('webUsers').textContent = deviceUsage.web;
-                document.getElementById('androidUsers').textContent = deviceUsage.android;
-                document.getElementById('iosUsers').textContent = deviceUsage.ios;
-
-                // Update feature usage
-                document.getElementById('chatbotUsers').textContent = featureUsage.chatbot;
-                document.getElementById('materiUsers').textContent = featureUsage.materi;
-                document.getElementById('forumUsers').textContent = featureUsage.forum;
-
-            } catch (error) {
-                console.error('Error loading survey analytics:', error);
-            }
-        }
-
-        function exportSurveyData() {
-            try {
-                const surveyData = JSON.parse(localStorage.getItem('surveyResponses') || '[]');
-                
-                if (surveyData.length === 0) {
-                    showNotification('Tidak ada data survey untuk diekspor', 'error');
-                    return;
-                }
-
-                const dataStr = JSON.stringify(surveyData, null, 2);
-                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-                
-                const exportFileDefaultName = `survey-data-${new Date().toISOString().split('T')[0]}.json`;
-                
-                const linkElement = document.createElement('a');
-                linkElement.setAttribute('href', dataUri);
-                linkElement.setAttribute('download', exportFileDefaultName);
-                linkElement.click();
-                
-                showNotification('Data survey berhasil diekspor!', 'success');
-            } catch (error) {
-                console.error('Error exporting survey data:', error);
-                showNotification('Gagal mengekspor data survey', 'error');
-            }
-        }
-
-        function clearAllData() {
-            if (confirm('PERHATIAN: Ini akan menghapus SEMUA data! Lanjutkan?')) {
-                localStorage.clear(); // Clear all local storage
-                authService.users = []; // Clear users in authService
-                authService.saveUsersToLocalStorage(); // Save empty users
-                
-                // Recreate default admin user in authService
-                authService.users.push({ email: 'admin@mi.com', password: 'admin123', role: 'admin' });
-                authService.saveUsersToLocalStorage();
-
-                users = authService.users; // Update local users array
-                materials = { counseling: [], teaching: [] }; // Clear materials
-                
-                loadDashboardData();
-                showNotification('Semua data lokal berhasil dihapus!', 'success');
-            }
-        }
-
-        function exportData() {
-            const data = {
-                users: users,
-                materials: materials,
-                exportDate: new Date().toISOString()
-            };
-            
-            const dataStr = JSON.stringify(data, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(dataBlob);
-            link.download = `moral-intelligence-data-${new Date().toISOString().split('T')[0]}.json`;
-            link.click();
-            
-            showNotification('Data berhasil di-export!', 'success');
-        }
-
-        function refreshStats() {
-            loadDashboardData();
-            showNotification('Statistik berhasil di-refresh!', 'success');
-        }
-
-        function logout() {
-            authService.logout();
-            window.location.href = 'index.html';
-        }
-
+        // Fungsi untuk menampilkan notifikasi
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             const notificationText = document.getElementById('notificationText');
-            
             notificationText.textContent = message;
             
-            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 z-50`;
+            // Reset classes
+            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg transform transition-transform duration-300 z-50`;
+            
             if (type === 'success') {
                 notification.classList.add('bg-green-500', 'text-white');
-            } else if (type === 'error') {
-                notification.classList.add('bg-red-500', 'text-white');
-            } else if (type === 'warning') {
-                notification.classList.add('bg-yellow-500', 'text-white');
             } else {
-                notification.classList.add('bg-blue-500', 'text-white');
+                notification.classList.add('bg-red-500', 'text-white');
             }
             
             notification.classList.remove('translate-x-full');
-            
             setTimeout(() => {
                 notification.classList.add('translate-x-full');
             }, 3000);
         }
 
-        // ===== Materials UI Handlers =====
-        const form = document.getElementById('materialForm');
-        // Nonaktifkan submit form default agar tidak mencoba upload ke Storage
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            showNotification('Gunakan tombol Simpan untuk menyimpan materi.', 'warning');
-        });
-
-        // Simpan: jika ada file -> upload ke Drive lalu simpan link, jika hanya URL -> simpan link saja
-        document.getElementById('uploadDriveBtn').addEventListener('click', async () => {
-            const title = document.getElementById('materialTitle').value.trim();
-            const description = document.getElementById('materialDesc').value.trim();
-            const fileInput = document.getElementById('materialFile');
-            const file = fileInput.files[0];
-            const linkUrl = document.getElementById('materialLink').value.trim();
-            if (!title || !description) {
-                showNotification('Isi judul dan deskripsi', 'warning');
-                return;
-            }
-            try {
-                let finalLink = linkUrl;
-                if (file) {
-                    const { directLink, webViewLink } = await uploadFileToDrive(file, {});
-                    finalLink = directLink || webViewLink;
-                }
-                if (!finalLink) {
-                    showNotification('Pilih file atau isi URL materi', 'warning');
-                    return;
-                }
-                await createMaterial({ title, description, file: null, linkUrl: finalLink });
-                form.reset();
-                showNotification('Materi disimpan', 'success');
-            } catch (e) {
-                console.error(e);
-                showNotification('Gagal menyimpan materi', 'error');
-            }
-        });
-
-        function renderMaterialCard(item) {
-            const dateStr = item.createdAt?.seconds ? new Date(item.createdAt.seconds * 1000).toLocaleString('id-ID') : '-';
-            const fileName = item.filePath ? item.filePath.split('/').pop() : '';
-            return `
-                <div class="border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
-                    <div class="flex items-start justify-between">
-                        <div>
-                            <h4 class="font-semibold text-gray-800">${item.title || 'Tanpa Judul'}</h4>
-                            <p class="text-sm text-gray-600 mt-1">${item.description || ''}</p>
-                            <p class="text-xs text-gray-400 mt-2">${dateStr}</p>
-                        </div>
-                        <div class="flex gap-2 ml-4">
-                            <button class="edit-material px-3 py-1 text-xs bg-blue-50 text-blue-600 rounded" data-id="${item.id}">Edit</button>
-                            <button class="delete-material px-3 py-1 text-xs bg-red-50 text-red-600 rounded" data-id="${item.id}" data-path="${item.filePath || ''}">Hapus</button>
-                        </div>
-                    </div>
-                    <div class="mt-3 text-sm">
-                        ${item.fileUrl ? `<a class="text-indigo-600 hover:underline" href="${item.fileUrl}" target="_blank">Lihat / Unduh (${fileName})</a>` : (item.linkUrl ? `<a class="text-indigo-600 hover:underline" href="${item.linkUrl}" target="_blank">Buka Link</a>` : '<span class="text-gray-400">Tidak ada file/link</span>')}
-                    </div>
-                </div>
-            `;
+        // Fungsi Logout
+        function logout() {
+            authService.logout();
+            window.location.href = "login.html";
         }
 
-        function bindMaterialActions() {
-            document.querySelectorAll('.edit-material').forEach(btn => {
-                btn.addEventListener('click', async () => {
-                    const id = btn.getAttribute('data-id');
-                    const current = materials.find(m => m.id === id) || {};
-                    const newTitle = prompt('Edit judul materi:', current.title || '');
-                    if (newTitle === null) return;
-                    const newDesc = prompt('Edit deskripsi materi:', current.description || '');
-                    if (newDesc === null) return;
-                    let newFile = null;
-                    const newLink = prompt('Edit URL materi (opsional, kosongkan jika tidak diubah):', current.linkUrl || '');
-                    const wantChange = confirm('Ganti file juga?');
-                    if (wantChange) {
-                        // Create a hidden file input for selecting new file
-                        const input = document.createElement('input');
-                        input.type = 'file';
-                        input.accept = '*/*';
-                        input.click();
-                        await new Promise(resolve => {
-                            input.onchange = () => resolve();
-                        });
-                        newFile = input.files[0] || null;
-                    }
-                    try {
-                        await updateMaterial(id, { title: newTitle.trim(), description: newDesc.trim(), newFile, linkUrl: (newLink || '').trim() });
-                        showNotification('Materi berhasil diperbarui', 'success');
-                    } catch (e) {
-                        console.error(e);
-                        showNotification('Gagal memperbarui materi', 'error');
-                    }
-                });
-            });
-            document.querySelectorAll('.delete-material').forEach(btn => {
-                btn.addEventListener('click', async () => {
-                    if (!confirm('Hapus materi ini?')) return;
-                    const id = btn.getAttribute('data-id');
-                    const path = btn.getAttribute('data-path');
-                    try {
-                        await deleteMaterial(id, path);
-                        showNotification('Materi dihapus', 'success');
-                    } catch (e) {
-                        console.error(e);
-                        showNotification('Gagal menghapus materi', 'error');
-                    }
-                });
-            });
-        }
-
-        // Expose functions for inline onclick buttons
-        window.exportData = exportData;
-        window.exportSurveyData = exportSurveyData;
-        window.clearAllData = clearAllData;
-        window.refreshStats = refreshStats;
+        // Expose functions to global scope if needed by inline onclick attributes
+        window.exportData = () => { console.log("Exporting data..."); };
+        window.exportSurveyData = () => { console.log("Exporting survey data..."); };
+        window.refreshStats = () => { console.log("Refreshing stats..."); };
         window.logout = logout;
     </script>
 </body>
