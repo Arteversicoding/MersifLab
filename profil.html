@@ -25,7 +25,7 @@
                 </div>
                 <div class="relative">
                     <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M14 9V5a3 3 0 0 0-6 0v4"></path><rect x="2" y="9" width="20" height="12" rx="2" ry="2"></rect></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     </div>
                     <div class="absolute -top-1 -right-1 w-4 h-4 bg-blue-400 rounded-full border-2 border-cyan-700"></div>
                 </div>
@@ -33,9 +33,18 @@
 
             <!-- Quick Stats -->
             <div class="grid grid-cols-3 gap-4">
-                <div class="text-center"><p class="text-2xl font-bold">127</p><p class="text-cyan-200 text-xs">Hari Aktif</p></div>
-                <div class="text-center"><p class="text-2xl font-bold">45</p><p class="text-cyan-200 text-xs">Proyek Selesai</p></div>
-                <div class="text-center"><p class="text-2xl font-bold">4.9</p><p class="text-cyan-200 text-xs">Rating</p></div>
+                <div class="text-center">
+                    <p id="active-days" class="text-2xl font-bold">0</p>
+                    <p class="text-cyan-200 text-xs">Hari Aktif</p>
+                </div>
+                <div class="text-center">
+                    <p id="completed-projects" class="text-2xl font-bold">0</p>
+                    <p class="text-cyan-200 text-xs">Proyek Selesai</p>
+                </div>
+                <div class="text-center">
+                    <p id="average-rating" class="text-2xl font-bold">0.0</p>
+                    <p class="text-cyan-200 text-xs">Rating</p>
+                </div>
             </div>
         </div>
 
@@ -122,6 +131,7 @@
                 
                 onAuthStateChanged(auth, async (user) => {
                     await updateUserProfile(user);
+                    await initializeUserStats(user);
                 });
                 
             } catch (error) {
@@ -196,6 +206,84 @@
                 document.getElementById('profile-name').textContent = 'User';
                 document.getElementById('profile-profession').textContent = 'Tech Learner';
             }
+        }
+
+        // Initialize user stats
+        async function initializeUserStats(user) {
+            try {
+                if (user) {
+                    // Import user stats service
+                    const userStatsService = await import('./user-stats-service.js');
+                    const statsService = userStatsService.default;
+                    
+                    // Subscribe to stats updates
+                    statsService.subscribe(updateStatsDisplay);
+                    
+                    // Start listening for user stats
+                    statsService.startListening(user.uid);
+                } else {
+                    // Reset stats for logged out user
+                    updateStatsDisplay({
+                        activeDays: 0,
+                        completedProjects: 0,
+                        averageRating: 0
+                    });
+                }
+            } catch (error) {
+                console.error('Error initializing user stats:', error);
+                // Fallback to default values
+                updateStatsDisplay({
+                    activeDays: 0,
+                    completedProjects: 0,
+                    averageRating: 0
+                });
+            }
+        }
+
+        // Update stats display with animation
+        function updateStatsDisplay(stats) {
+            const activeDaysEl = document.getElementById('active-days');
+            const completedProjectsEl = document.getElementById('completed-projects');
+            const averageRatingEl = document.getElementById('average-rating');
+            
+            if (activeDaysEl) {
+                animateNumber(activeDaysEl, parseInt(activeDaysEl.textContent) || 0, stats.activeDays);
+            }
+            
+            if (completedProjectsEl) {
+                animateNumber(completedProjectsEl, parseInt(completedProjectsEl.textContent) || 0, stats.completedProjects);
+            }
+            
+            if (averageRatingEl) {
+                animateNumber(averageRatingEl, parseFloat(averageRatingEl.textContent) || 0, stats.averageRating, true);
+            }
+        }
+
+        // Animate number changes
+        function animateNumber(element, start, end, isDecimal = false) {
+            const duration = 1000; // 1 second
+            const startTime = performance.now();
+            
+            function updateNumber(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function for smooth animation
+                const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+                const current = start + (end - start) * easeOutCubic;
+                
+                if (isDecimal) {
+                    element.textContent = current.toFixed(1);
+                } else {
+                    element.textContent = Math.round(current);
+                }
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateNumber);
+                }
+            }
+            
+            requestAnimationFrame(updateNumber);
         }
     </script>
     <script type="module">

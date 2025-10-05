@@ -43,6 +43,12 @@
             <div class="text-center">
                 <h1 class="text-3xl font-bold mb-2">Admin Dashboard</h1>
                 <p class="text-cyan-100">Platform Mersiflab Management System</p>
+                <div class="flex items-center justify-center mt-2">
+                    <div id="realTimeIndicator" class="flex items-center space-x-2 bg-white/20 px-3 py-1 rounded-full text-sm">
+                        <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                        <span>Real-time Data</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -184,15 +190,16 @@
 
     <!-- Scripts -->
     <script type="module">
-        // Konfigurasi Supabase
-        const SUPABASE_URL = "https://zlcislycukayjgjhozjy.supabase.co";
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpsY2lzbHljdWtheWpnamhvemp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzOTcyNTcsImV4cCI6MjA3MTk3MzI1N30.XF_hxADjk1azFH3PfqK1i_edNlFLwPeZuzXvPmAx4XM";
-        const BUCKET = "upload";
+        // Konfigurasi Supabase - Database Baru
+        const SUPABASE_URL = "https://tuurywgzzpuumfpmxinq.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1dXJ5d2d6enB1dW1mcG14aW5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk2Nzc1ODgsImV4cCI6MjA3NTI1MzU4OH0.ewRTIGcNmlK3oynwBSOGF-Lrd3Z2hljIhNkSGqEm6SU";
+        const BUCKET = "materials"; // Changed to more descriptive name
 
         // Import services dan Supabase client
         const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
         import { AuthService } from './auth-service.js';
         import { listenMaterialsRealtime, createMaterial, updateMaterial, deleteMaterial } from './materials-service.js';
+        import statsService from './stats-service.js';
 
         // Inisialisasi
         const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -201,6 +208,8 @@
         // Fungsi untuk upload file ke Supabase Storage
         async function uploadFileToSupabase(file, title, description) {
             try {
+                console.log('Starting upload process...', { file: file.name, size: file.size });
+                
                 const fileExt = file.name.split('.').pop();
                 
                 const sanitize = (str) => str.toLowerCase()
@@ -212,14 +221,24 @@
 
                 const baseName = `${sanitize(title)}-${sanitize(description)}`;
                 const fileName = `${baseName.substring(0, 100)}_${Date.now()}.${fileExt}`;
+                
+                console.log('Generated filename:', fileName);
 
+                // Upload dengan options yang lebih explicit
                 const { data, error } = await supabase.storage
                     .from(BUCKET)
-                    .upload(fileName, file);
+                    .upload(fileName, file, {
+                        cacheControl: '3600',
+                        upsert: false,
+                        contentType: file.type
+                    });
 
                 if (error) {
-                    throw error;
+                    console.error('Supabase upload error:', error);
+                    throw new Error(`Upload gagal: ${error.message}`);
                 }
+
+                console.log('Upload successful:', data);
 
                 const { data: { publicUrl } } = supabase.storage
                     .from(BUCKET)
@@ -229,6 +248,8 @@
                     throw new Error('Gagal mendapatkan URL publik untuk file yang diunggah.');
                 }
                 
+                console.log('Public URL generated:', publicUrl);
+                
                 return {
                     success: true,
                     fileName: fileName,
@@ -236,7 +257,12 @@
                     fullData: data
                 };
             } catch (error) {
-                console.error('Upload error:', error);
+                console.error('Upload error details:', {
+                    message: error.message,
+                    code: error.code,
+                    details: error.details,
+                    hint: error.hint
+                });
                 throw error;
             }
         }
@@ -276,12 +302,17 @@
                     finalLink = uploadResult.publicUrl;
                 }
 
-                await createMaterial({ 
+                // Create material with proper structure for both file and URL
+                const materialData = {
                     title, 
                     description, 
-                    linkUrl: finalLink, 
-                    filePath: file ? uploadResult.fileName : '' 
-                });
+                    linkUrl: finalLink,
+                    filePath: file ? uploadResult.fileName : '',
+                    fileUrl: file ? finalLink : '', // Add fileUrl for compatibility
+                    file: null // Don't pass file to Firebase service
+                };
+                
+                await createMaterial(materialData);
                 showNotification("✅ Materi berhasil disimpan!", "success");
                 document.getElementById("materialForm").reset();
 
@@ -361,35 +392,75 @@
         // Panggil listener materi
         listenMaterialsRealtime(renderMaterials);
 
-        // Fungsi untuk load stats
-        async function loadStats() {
-            try {
-                // Import Firestore functions
-                const { getFirestore, collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
-                const { db } = await import('./firebase-init.js');
-
-                // Get total users
-                const usersSnapshot = await getDocs(collection(db, 'users'));
-                document.getElementById('totalUsers').textContent = usersSnapshot.size;
-
-                // Get total forum posts
-                const forumSnapshot = await getDocs(collection(db, 'forum'));
-                document.getElementById('totalChats').textContent = forumSnapshot.size;
-
-                // Get survey responses if collection exists
-                try {
-                    const surveySnapshot = await getDocs(collection(db, 'feedback'));
-                    document.getElementById('surveyResponses').textContent = surveySnapshot.size;
-                } catch (err) {
-                    console.log('Survey collection might not exist yet');
+        // Fungsi untuk update stats display
+        function updateStatsDisplay(stats) {
+            document.getElementById('totalUsers').textContent = stats.totalUsers;
+            document.getElementById('totalMaterials').textContent = stats.totalMaterials;
+            document.getElementById('totalChats').textContent = stats.totalForumPosts;
+            document.getElementById('surveyResponses').textContent = stats.activeToday;
+            
+            // Add animation effect when stats update
+            const statElements = ['totalUsers', 'totalMaterials', 'totalChats', 'surveyResponses'];
+            statElements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.style.transform = 'scale(1.1)';
+                    element.style.transition = 'transform 0.2s ease';
+                    setTimeout(() => {
+                        element.style.transform = 'scale(1)';
+                    }, 200);
                 }
-            } catch (error) {
-                console.error('Error loading stats:', error);
+            });
+        }
+
+        // Initialize real-time stats
+        function initializeRealTimeStats() {
+            // Subscribe to stats updates
+            statsService.subscribe(updateStatsDisplay);
+            
+            // Start listening to all collections
+            statsService.startListening();
+            
+            console.log('Real-time stats initialized');
+        }
+
+        // Initialize stats on page load
+        initializeRealTimeStats();
+
+        // Auto-refresh functionality - refresh stats every 30 seconds
+        let autoRefreshInterval;
+        function startAutoRefresh() {
+            autoRefreshInterval = setInterval(() => {
+                console.log('Auto-refreshing stats...');
+                statsService.stopListening();
+                statsService.startListening();
+            }, 30000); // 30 seconds
+        }
+
+        function stopAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
             }
         }
 
-        // Load stats on page load
-        loadStats();
+        // Start auto-refresh
+        startAutoRefresh();
+
+        // Stop auto-refresh when page is hidden/minimized
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopAutoRefresh();
+            } else {
+                startAutoRefresh();
+            }
+        });
+
+        // Clean up on page unload
+        window.addEventListener('beforeunload', () => {
+            stopAutoRefresh();
+            statsService.stopListening();
+        });
 
         // Fungsi hapus file dari Supabase
         async function deleteFileFromSupabase(fileName) {
@@ -442,7 +513,9 @@
             showNotification("⚠️ Fitur export survey akan segera hadir", "error");
         };
         window.refreshStats = () => {
-            loadStats();
+            // Force refresh by restarting listeners
+            statsService.stopListening();
+            statsService.startListening();
             showNotification("✅ Stats berhasil diperbarui!", "success");
         };
         window.logout = logout;

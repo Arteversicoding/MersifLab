@@ -9,7 +9,7 @@ import {
     setPersistence,
     browserSessionPersistence
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { app, auth } from "./firebase-init.js";
 
 const db = getFirestore(app);
@@ -153,6 +153,10 @@ export class AuthService {
             }
 
             this.isAuthenticated = true;
+            
+            // Update last login timestamp
+            await this.updateLastLogin(user.uid);
+            
             return { user: this.currentUser };
         } catch (error) {
             console.error("Login error:", error);
@@ -205,6 +209,10 @@ export class AuthService {
                 role: 'admin'
             };
             this.isAuthenticated = true;
+            
+            // Update last login timestamp
+            await this.updateLastLogin(user.uid);
+            
             return { user: this.currentUser };
         } catch (error) {
             console.error("Admin login error:", error);
@@ -258,6 +266,10 @@ export class AuthService {
                 role: this.isAdminEmail(user.email) ? 'admin' : userRole
             };
             this.isAuthenticated = true;
+            
+            // Update last login timestamp
+            await this.updateLastLogin(user.uid);
+            
             return { user: this.currentUser };
         } catch (error) {
             console.error("Google login error:", error);
@@ -278,6 +290,19 @@ export class AuthService {
 
     getCurrentUser() {
         return this.currentUser;
+    }
+
+    // Update user's last login timestamp
+    async updateLastLogin(userId) {
+        try {
+            const userRef = doc(db, 'users', userId);
+            await updateDoc(userRef, {
+                lastLoginAt: serverTimestamp()
+            });
+        } catch (error) {
+            console.error('Error updating last login:', error);
+            // Don't throw error as this is not critical for login flow
+        }
     }
 
     waitForAuthInit() {

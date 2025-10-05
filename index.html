@@ -39,9 +39,18 @@
             
             <!-- Quick Stats -->
             <div class="grid grid-cols-3 gap-4">
-                <div class="text-center"><p class="text-2xl font-bold">127</p><p class="text-cyan-200 text-xs">Hari Aktif</p></div>
-                <div class="text-center"><p class="text-2xl font-bold">45</p><p class="text-cyan-200 text-xs">Proyek Selesai</p></div>
-                <div class="text-center"><p class="text-2xl font-bold">4.9</p><p class="text-cyan-200 text-xs">Rating</p></div>
+                <div class="text-center">
+                    <p id="home-active-days" class="text-2xl font-bold">0</p>
+                    <p class="text-cyan-200 text-xs">Hari Aktif</p>
+                </div>
+                <div class="text-center">
+                    <p id="home-completed-projects" class="text-2xl font-bold">0</p>
+                    <p class="text-cyan-200 text-xs">Proyek Selesai</p>
+                </div>
+                <div class="text-center">
+                    <p id="home-average-rating" class="text-2xl font-bold">0.0</p>
+                    <p class="text-cyan-200 text-xs">Rating</p>
+                </div>
             </div>
         </div>
 
@@ -242,6 +251,7 @@
                 
                 onAuthStateChanged(auth, async (user) => {
                     await updateUserProfile(user);
+                    await initializeUserStats(user);
                 });
                 
             } catch (error) {
@@ -336,6 +346,84 @@
                 document.getElementById('user-role').textContent = 'user';
                 document.getElementById('user-profession').textContent = 'Tech Learner';
             }
+        }
+
+        // Initialize user stats for home page
+        async function initializeUserStats(user) {
+            try {
+                if (user) {
+                    // Import user stats service
+                    const userStatsService = await import('./user-stats-service.js');
+                    const statsService = userStatsService.default;
+                    
+                    // Subscribe to stats updates
+                    statsService.subscribe(updateHomeStatsDisplay);
+                    
+                    // Start listening for user stats
+                    statsService.startListening(user.uid);
+                } else {
+                    // Reset stats for logged out user
+                    updateHomeStatsDisplay({
+                        activeDays: 0,
+                        completedProjects: 0,
+                        averageRating: 0
+                    });
+                }
+            } catch (error) {
+                console.error('Error initializing user stats:', error);
+                // Fallback to default values
+                updateHomeStatsDisplay({
+                    activeDays: 0,
+                    completedProjects: 0,
+                    averageRating: 0
+                });
+            }
+        }
+
+        // Update home stats display with animation
+        function updateHomeStatsDisplay(stats) {
+            const activeDaysEl = document.getElementById('home-active-days');
+            const completedProjectsEl = document.getElementById('home-completed-projects');
+            const averageRatingEl = document.getElementById('home-average-rating');
+            
+            if (activeDaysEl) {
+                animateHomeNumber(activeDaysEl, parseInt(activeDaysEl.textContent) || 0, stats.activeDays);
+            }
+            
+            if (completedProjectsEl) {
+                animateHomeNumber(completedProjectsEl, parseInt(completedProjectsEl.textContent) || 0, stats.completedProjects);
+            }
+            
+            if (averageRatingEl) {
+                animateHomeNumber(averageRatingEl, parseFloat(averageRatingEl.textContent) || 0, stats.averageRating, true);
+            }
+        }
+
+        // Animate number changes for home page
+        function animateHomeNumber(element, start, end, isDecimal = false) {
+            const duration = 1000; // 1 second
+            const startTime = performance.now();
+            
+            function updateNumber(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function for smooth animation
+                const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+                const current = start + (end - start) * easeOutCubic;
+                
+                if (isDecimal) {
+                    element.textContent = current.toFixed(1);
+                } else {
+                    element.textContent = Math.round(current);
+                }
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateNumber);
+                }
+            }
+            
+            requestAnimationFrame(updateNumber);
         }
     </script>
 </body>

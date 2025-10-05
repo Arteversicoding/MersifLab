@@ -27,22 +27,27 @@ export function listenMaterialsRealtime(callback) {
 	});
 }
 
-export async function createMaterial({ title, description, file, linkUrl }) {
+export async function createMaterial({ title, description, file, linkUrl, fileUrl, filePath }) {
 	if (!auth.currentUser) throw new Error('Unauthorized');
-	let fileUrl = '';
-	let filePath = '';
+	
+	// If file is provided, use Firebase Storage (legacy support)
+	let finalFileUrl = fileUrl || '';
+	let finalFilePath = filePath || '';
+	
 	if (file) {
-		filePath = `materials/${auth.currentUser.uid}/${Date.now()}-${file.name}`;
-		const ref = storageRef(storage, filePath);
+		// Legacy Firebase Storage upload
+		finalFilePath = `materials/${auth.currentUser.uid}/${Date.now()}-${file.name}`;
+		const ref = storageRef(storage, finalFilePath);
 		await uploadBytes(ref, file);
-		fileUrl = await getDownloadURL(ref);
+		finalFileUrl = await getDownloadURL(ref);
 	}
+	
 	return await addDoc(collection(db, MATERIALS_COLLECTION), {
 		title,
 		description,
-		fileUrl,
+		fileUrl: finalFileUrl,
 		linkUrl: linkUrl || '',
-		filePath,
+		filePath: finalFilePath,
 		createdAt: serverTimestamp(),
 		updatedAt: serverTimestamp(),
 		ownerId: auth.currentUser.uid
