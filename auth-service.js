@@ -73,6 +73,9 @@ export class AuthService {
 
     // Check if email is admin email
     isAdminEmail(email) {
+        if (!email || typeof email !== 'string') {
+            return false;
+        }
         return this.adminEmails.includes(email.toLowerCase());
     }
 
@@ -203,6 +206,11 @@ export class AuthService {
             const result = await signInWithPopup(this.auth, this.provider);
             const user = result.user;
 
+            // Validate that we received email from Google
+            if (!user.email) {
+                throw new Error('Tidak dapat mengambil email dari akun Google Anda. Pastikan Anda memberikan izin email.');
+            }
+
             // Check if user exists in Firestore
             const userDocRef = doc(db, "users", user.uid);
             const userDoc = await getDoc(userDocRef);
@@ -211,7 +219,7 @@ export class AuthService {
 
             if (!userDoc.exists()) {
                 // New user, create a document in Firestore
-                const [firstName, ...lastName] = user.displayName.split(' ');
+                const [firstName, ...lastName] = (user.displayName || '').split(' ');
                 await setDoc(userDocRef, {
                     firstName: firstName || '',
                     lastName: lastName.join(' ') || '',
@@ -229,7 +237,7 @@ export class AuthService {
             this.currentUser = {
                 uid: user.uid,
                 email: user.email,
-                displayName: user.displayName,
+                displayName: user.displayName || user.email,
                 photoURL: user.photoURL,
                 role: this.isAdminEmail(user.email) ? 'admin' : userRole
             };
