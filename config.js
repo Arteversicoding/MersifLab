@@ -1,11 +1,10 @@
 export const firebaseConfig = {
-  apiKey: "AIzaSyD1I9B7-OeTOGes_bpCjeD7eDRdcoEhuGs",
-  authDomain: "mersiflab-63b3c.firebaseapp.com",
-  projectId: "mersiflab-63b3c",
-  storageBucket: "mersiflab-63b3c.appspot.com",
-  messagingSenderId: "842937189045",
-  appId: "1:842937189045:web:03c4a5ae96c7026b6ff4fc",
-  measurementId: "G-0HZCJ4DCDR"
+  apiKey: "AIzaSyBLOUOvMcRXorVJb3stbgBJ6LvC5RLiKwQ",
+  authDomain: "mersiflms.firebaseapp.com",
+  projectId: "mersiflms",
+  storageBucket: "mersiflms.firebasestorage.app",
+  messagingSenderId: "626102169469",
+  appId: "1:626102169469:web:796c9383a3d6d0716b2614"
 };
 
 export const geminiApiKey = "AIzaSyAkIyXZk5Xk36eG4hrQ0aKlRlkg6B5gaw8";
