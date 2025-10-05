@@ -112,7 +112,23 @@ export class AuthService {
     async login(email, password) {
         try {
             await setPersistence(this.auth, browserSessionPersistence);
-            const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
+
+            // Try to sign in first
+            let userCredential;
+            try {
+                userCredential = await signInWithEmailAndPassword(this.auth, email, password);
+            } catch (signInError) {
+                // If user doesn't exist and it's an admin email, create it automatically
+                if ((signInError.code === 'auth/user-not-found' || signInError.code === 'auth/invalid-credential') && this.isAdminEmail(email)) {
+                    console.log(`Admin user ${email} not found. Creating automatically...`);
+                    await this.ensureAdminUserExists(email, password);
+                    // Try to sign in again after creation
+                    userCredential = await signInWithEmailAndPassword(this.auth, email, password);
+                } else {
+                    throw signInError;
+                }
+            }
+
             const user = userCredential.user;
 
             const userDoc = await getDoc(doc(db, "users", user.uid));
@@ -305,8 +321,13 @@ export class AuthService {
             const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
             const user = userCredential.user;
             await setDoc(doc(db, "users", user.uid), {
+                firstName: 'Admin',
+                lastName: 'Mersiflab',
                 email: email,
-                role: 'admin'
+                role: 'admin',
+                profession: 'Administrator',
+                institution: 'Mersiflab',
+                createdAt: new Date()
             });
             console.log('Admin user created successfully.');
         } catch (error) {
