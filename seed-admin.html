@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Admin - Mersiflab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-100 flex items-center justify-center p-4">
+
+    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Setup Admin</h1>
+            <p class="text-gray-600">Buat akun admin untuk Mersiflab</p>
+        </div>
+
+        <div id="status-message" class="hidden mb-4 p-4 rounded-xl"></div>
+
+        <form id="seed-admin-form" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Email Admin</label>
+                <input type="email" id="admin-email" value="admin@mersiflab.com" readonly class="w-full border border-gray-300 rounded-lg px-4 py-3 bg-gray-50 text-gray-600 cursor-not-allowed">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                <input type="password" id="admin-password" value="admin123" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <p class="text-xs text-gray-500 mt-1">Default: admin123 (bisa diganti)</p>
+            </div>
+
+            <button type="submit" id="create-admin-btn" class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold py-3 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all shadow-md">
+                Buat Akun Admin
+            </button>
+        </form>
+
+        <div class="mt-6 p-4 bg-blue-50 rounded-xl">
+            <h3 class="font-semibold text-blue-800 mb-2">ℹ️ Informasi</h3>
+            <ul class="text-sm text-blue-700 space-y-1">
+                <li>• Email admin: admin@mersiflab.com</li>
+                <li>• Password default: admin123</li>
+                <li>• Halaman ini hanya untuk setup awal</li>
+                <li>• Setelah dibuat, login di <a href="admin-login.html" class="underline font-semibold">admin-login.html</a></li>
+            </ul>
+        </div>
+
+        <div class="mt-4 text-center">
+            <a href="index.html" class="text-cyan-600 hover:text-cyan-700 text-sm">← Kembali ke Beranda</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { auth, db } from './firebase-init.js';
+
+        const form = document.getElementById('seed-admin-form');
+        const statusMessage = document.getElementById('status-message');
+        const createBtn = document.getElementById('create-admin-btn');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+
+            if (password.length < 6) {
+                showMessage('Password minimal 6 karakter!', 'error');
+                return;
+            }
+
+            createBtn.disabled = true;
+            createBtn.textContent = 'Membuat akun...';
+
+            try {
+                // Create user in Firebase Auth
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Create user document in Firestore with admin role
+                await setDoc(doc(db, "users", user.uid), {
+                    email: email,
+                    firstName: 'Admin',
+                    lastName: 'Mersiflab',
+                    role: 'admin',
+                    profession: 'Administrator',
+                    institution: 'Mersiflab',
+                    createdAt: new Date()
+                });
+
+                showMessage('✅ Akun admin berhasil dibuat! Redirecting to admin login...', 'success');
+
+                // Redirect to admin login after 2 seconds
+                setTimeout(() => {
+                    window.location.href = 'admin-login.html';
+                }, 2000);
+
+            } catch (error) {
+                console.error('Error creating admin:', error);
+
+                let errorMessage = 'Gagal membuat akun admin!';
+
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = '✅ Akun admin sudah ada! Silakan login di admin-login.html';
+                    setTimeout(() => {
+                        window.location.href = 'admin-login.html';
+                    }, 2000);
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'Password terlalu lemah! Minimal 6 karakter.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'Format email tidak valid!';
+                }
+
+                showMessage(errorMessage, error.code === 'auth/email-already-in-use' ? 'success' : 'error');
+
+                createBtn.disabled = false;
+                createBtn.textContent = 'Buat Akun Admin';
+            }
+        });
+
+        function showMessage(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = `p-4 rounded-xl mb-4 ${
+                type === 'success'
+                    ? 'bg-green-100 border border-green-400 text-green-700'
+                    : 'bg-red-100 border border-red-400 text-red-700'
+            }`;
+            statusMessage.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
