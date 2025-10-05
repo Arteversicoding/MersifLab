@@ -38,53 +38,18 @@
                     <input type="text" id="search-input" placeholder="Cari topik teknologi..." class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                 </div>
-                <div class="flex space-x-2 overflow-x-auto no-scrollbar">
-                    <button class="bg-cyan-500 text-white px-4 py-2 rounded-full text-sm whitespace-nowrap">Semua</button>
-                    <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm whitespace-nowrap">AI</button>
-                    <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm whitespace-nowrap">IoT</button>
-                    <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm whitespace-nowrap">VR</button>
-                    <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm whitespace-nowrap">STEM</button>
+                <div id="category-filters" class="flex space-x-2 overflow-x-auto no-scrollbar">
+                    <button data-category="All" class="category-filter-button bg-cyan-500 text-white px-4 py-2 rounded-full text-sm whitespace-nowrap">Semua</button>
+                    <button data-category="AI" class="category-filter-button bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm whitespace-nowrap">AI</button>
+                    <button data-category="IoT" class="category-filter-button bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm whitespace-nowrap">IoT</button>
+                    <button data-category="VR" class="category-filter-button bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm whitespace-nowrap">VR</button>
+                    <button data-category="STEM" class="category-filter-button bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm whitespace-nowrap">STEM</button>
                 </div>
             </div>
             
             <!-- Forum Threads -->
             <div id="forum-threads" class="space-y-4">
-                <!-- Thread 1 -->
-                <div class="bg-white rounded-2xl p-5 shadow-lg">
-                    <div class="flex items-start space-x-4">
-                        <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">BR</div>
-                        <div class="flex-1">
-                            <div class="flex items-center justify-between mb-2">
-                                <h4 class="font-bold text-gray-800">Bu Rina</h4>
-                                <span class="text-gray-400 text-xs">2 jam lalu</span>
-                            </div>
-                            <h3 class="font-semibold text-gray-800 mb-2">Implementasi AI dalam Pembelajaran STEM</h3>
-                            <p class="text-gray-600 text-sm mb-3">Bagaimana cara mengintegrasikan AI tools seperti ChatGPT dalam pembelajaran matematika dan sains...</p>
-                            <div class="flex items-center justify-between text-sm text-gray-500">
-                                <div class="flex space-x-4"><span>👍 24</span><span>💬 12</span></div>
-                                <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">AI</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Thread 2 -->
-                <div class="bg-white rounded-2xl p-5 shadow-lg">
-                     <div class="flex items-start space-x-4">
-                        <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">PA</div>
-                        <div class="flex-1">
-                            <div class="flex items-center justify-between mb-2">
-                                <h4 class="font-bold text-gray-800">Pak Ahmad</h4>
-                                <span class="text-gray-400 text-xs">4 jam lalu</span>
-                            </div>
-                            <h3 class="font-semibold text-gray-800 mb-2">Project IoT Smart Classroom</h3>
-                            <p class="text-gray-600 text-sm mb-3">Sedang mengembangkan sistem monitoring suhu dan kelembaban kelas menggunakan Arduino... Ada saran sensor yang bagus?</p>
-                            <div class="flex items-center justify-between text-sm text-gray-500">
-                                <div class="flex space-x-4"><span>👍 18</span><span>💬 8</span></div>
-                                <span class="bg-cyan-100 text-cyan-700 px-2 py-1 rounded-full text-xs">IoT</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Posts will be loaded dynamically -->
             </div>
         </div>
     </div>
@@ -120,6 +85,16 @@
         <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
             <h2 class="text-xl font-bold mb-4">Buat Postingan Baru</h2>
             <form id="new-post-form">
+                <div class="mb-4">
+                    <label for="post-category" class="block text-sm font-medium text-gray-700 mb-1">Pilih Kategori</label>
+                    <select id="post-category" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500" required>
+                        <option value="">-- Pilih Kategori --</option>
+                        <option value="AI">AI</option>
+                        <option value="IoT">IoT</option>
+                        <option value="VR">VR</option>
+                        <option value="STEM">STEM</option>
+                    </select>
+                </div>
                 <div class="mb-4">
                     <label for="post-title" class="block text-sm font-medium text-gray-700 mb-1">Judul</label>
                     <input type="text" id="post-title" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500" required>

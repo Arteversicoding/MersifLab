@@ -9,8 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const newPostForm = document.getElementById('new-post-form');
     const cancelPostButton = document.getElementById('cancel-post-button');
     const forumThreads = document.getElementById('forum-threads');
+    const categoryFilterButtons = document.querySelectorAll('.category-filter-button');
 
     let currentUser = null;
+    let allPosts = [];
+    let currentFilter = 'All';
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -19,6 +22,23 @@ document.addEventListener('DOMContentLoaded', () => {
             currentUser = null;
         }
         fetchPosts();
+    });
+
+    // Category filter functionality
+    categoryFilterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Update active button style
+            categoryFilterButtons.forEach(btn => {
+                btn.classList.remove('bg-cyan-500', 'text-white');
+                btn.classList.add('bg-gray-100', 'text-gray-600');
+            });
+            button.classList.remove('bg-gray-100', 'text-gray-600');
+            button.classList.add('bg-cyan-500', 'text-white');
+
+            // Filter posts
+            currentFilter = button.dataset.category;
+            filterPosts(currentFilter);
+        });
     });
 
     // Show/hide modal
@@ -43,17 +63,25 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const category = document.getElementById('post-category').value;
         const title = document.getElementById('post-title').value;
         const content = document.getElementById('post-content').value;
 
+        if (!category) {
+            alert('Silakan pilih kategori terlebih dahulu.');
+            return;
+        }
+
         try {
             await addDoc(collection(db, 'posts'), {
+                category,
                 title,
                 content,
                 author: currentUser.displayName || 'Anonymous',
                 authorId: currentUser.uid,
                 createdAt: serverTimestamp(),
                 likes: 0,
+                likedBy: [],
                 comments: []
             });
             newPostForm.reset();
@@ -73,11 +101,11 @@ document.addEventListener('DOMContentLoaded', () => {
             querySnapshot.forEach((doc) => {
                 posts.push({ id: doc.id, ...doc.data() });
             });
-            
+
             // Filter out deleted posts (stored in localStorage)
             const deletedPosts = JSON.parse(localStorage.getItem('deletedPosts') || '[]');
             let filteredPosts = posts.filter(post => !deletedPosts.includes(post.id));
-            
+
             // Apply local edits to posts
             const editedPosts = JSON.parse(localStorage.getItem('editedPosts') || '{}');
             filteredPosts = filteredPosts.map(post => {
@@ -86,35 +114,65 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 return post;
             });
-            
+
             // If no posts from Firestore, try localStorage
             if (filteredPosts.length === 0) {
                 const localPosts = JSON.parse(localStorage.getItem('forumPosts') || '[]');
                 filteredPosts.push(...localPosts);
             }
-            
-            displayPosts(filteredPosts);
+
+            allPosts = filteredPosts;
+            filterPosts(currentFilter);
         } catch (error) {
             console.error("Error fetching posts: ", error);
             // Fallback to localStorage if Firestore fails
             const localPosts = JSON.parse(localStorage.getItem('forumPosts') || '[]');
-            displayPosts(localPosts);
+            allPosts = localPosts;
+            filterPosts(currentFilter);
         }
+    }
+
+    function filterPosts(category) {
+        let postsToDisplay = allPosts;
+
+        if (category !== 'All') {
+            postsToDisplay = allPosts.filter(post => post.category === category);
+        }
+
+        displayPosts(postsToDisplay);
     }
 
     function displayPosts(posts) {
         forumThreads.innerHTML = ''; // Clear existing posts
+
+        if (posts.length === 0) {
+            forumThreads.innerHTML = '<div class="text-center text-gray-500 py-8">Belum ada postingan di kategori ini.</div>';
+            return;
+        }
+
         posts.forEach((post) => {
             const postElement = createPostElement(post.id, post);
             forumThreads.appendChild(postElement);
         });
     }
 
+    // Get category badge color
+    function getCategoryBadge(category) {
+        const badges = {
+            'AI': 'bg-blue-100 text-blue-700',
+            'IoT': 'bg-cyan-100 text-cyan-700',
+            'VR': 'bg-purple-100 text-purple-700',
+            'STEM': 'bg-green-100 text-green-700'
+        };
+        return badges[category] || 'bg-gray-100 text-gray-700';
+    }
+
     // Create post element
     function createPostElement(id, post) {
         const postElement = document.createElement('div');
         postElement.className = 'bg-white rounded-2xl p-5 shadow-lg';
-        
+        postElement.dataset.category = post.category || 'All';
+
         const isOwner = currentUser && currentUser.uid === post.authorId;
         const ownerActions = isOwner ? `
             <div class="flex space-x-2 ml-4">
@@ -126,6 +184,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 </button>
             </div>
         ` : '';
+
+        const categoryBadge = post.category ? `<span class="${getCategoryBadge(post.category)} px-2 py-1 rounded-full text-xs">${post.category}</span>` : '';
+
+        const isLiked = currentUser && post.likedBy && post.likedBy.includes(currentUser.uid);
+        const likeIcon = isLiked ? '❤️' : '👍';
 
         postElement.innerHTML = `
             <div class="flex items-start space-x-4">
@@ -142,9 +205,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p id="post-content-${id}" class="text-gray-600 text-sm mb-3">${post.content}</p>
                     <div class="flex items-center justify-between text-sm text-gray-500">
                         <div class="flex space-x-4">
-                            <button data-id="${id}" class="like-button">👍 ${post.likes || 0}</button>
+                            <button data-id="${id}" class="like-button">${likeIcon} ${post.likes || 0}</button>
                             <button data-id="${id}" class="comment-button">💬 ${(post.comments || []).length}</button>
                         </div>
+                        ${categoryBadge}
                     </div>
                     <div id="comments-section-${id}" class="mt-4 hidden">
                         <div id="comments-list-${id}" class="space-y-2 mb-4">
@@ -197,10 +261,37 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const postRef = doc(db, 'posts', postId);
-                await updateDoc(postRef, {
-                    likes: increment(1)
+                // Get current post data
+                const querySnapshot = await getDocs(collection(db, 'posts'));
+                let currentPost = null;
+
+                querySnapshot.forEach((doc) => {
+                    if (doc.id === postId) {
+                        currentPost = { id: doc.id, ...doc.data() };
+                    }
                 });
+
+                if (!currentPost) return;
+
+                const likedBy = currentPost.likedBy || [];
+                const hasLiked = likedBy.includes(currentUser.uid);
+
+                const postRef = doc(db, 'posts', postId);
+
+                if (hasLiked) {
+                    // Unlike
+                    await updateDoc(postRef, {
+                        likes: increment(-1),
+                        likedBy: likedBy.filter(uid => uid !== currentUser.uid)
+                    });
+                } else {
+                    // Like
+                    await updateDoc(postRef, {
+                        likes: increment(1),
+                        likedBy: arrayUnion(currentUser.uid)
+                    });
+                }
+
                 fetchPosts(); // Refresh to show updated likes
             } catch (error) {
                 console.error("Error liking post: ", error);
