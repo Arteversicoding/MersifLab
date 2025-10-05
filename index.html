@@ -30,12 +30,11 @@
                     <h1 class="text-2xl font-bold mb-1">Mersiflab</h1>
                     <p class="text-cyan-100 text-sm">Platform Pembelajaran Teknologi & Inovasi</p>
                 </div>
-                <div class="relative">
-                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M14 9V5a3 3 0 0 0-6 0v4"/><rect x="2" y="9" width="20" height="12" rx="2" ry="2"/></svg>
-                    </div>
-                    <div class="absolute -top-1 -right-1 w-4 h-4 bg-blue-400 rounded-full border-2 border-cyan-700"></div>
-                </div>
+                <!-- Admin Dashboard Button (only visible for admin) -->
+                <a href="admin-dashboard.html" id="admin-dashboard-btn" class="hidden bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-all flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    <span class="text-white font-medium text-sm">Dashboard</span>
+                </a>
             </div>
             
             <!-- Quick Stats -->
@@ -307,10 +306,18 @@
                         avatar.innerHTML = `<img src="${userData.photoURL}" alt="Profile" class="w-full h-full rounded-full object-cover">`;
                     } else {
                         // Use initials or default emoji
-                        const initials = userData.displayName ? 
-                            userData.displayName.split(' ').map(n => n[0]).join('').toUpperCase() : 
+                        const initials = userData.displayName ?
+                            userData.displayName.split(' ').map(n => n[0]).join('').toUpperCase() :
                             '👤';
                         avatar.textContent = initials.length <= 2 ? initials : '👤';
+                    }
+
+                    // Show admin dashboard button in header if user is admin
+                    const adminDashboardBtn = document.getElementById('admin-dashboard-btn');
+                    if (userData.role === 'admin') {
+                        adminDashboardBtn.classList.remove('hidden');
+                    } else {
+                        adminDashboardBtn.classList.add('hidden');
                     }
 
                     // Show admin button if user is admin
@@ -329,6 +336,12 @@
                     document.getElementById('user-role').textContent = 'guest';
                     document.getElementById('user-profession').textContent = 'Tech Explorer';
                     document.getElementById('user-avatar').textContent = '👤';
+
+                    // Hide admin dashboard button when logged out
+                    const adminDashboardBtn = document.getElementById('admin-dashboard-btn');
+                    if (adminDashboardBtn) {
+                        adminDashboardBtn.classList.add('hidden');
+                    }
                 }
             } catch (error) {
                 console.error('Error updating user profile:', error);
