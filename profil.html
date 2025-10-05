@@ -31,34 +31,12 @@
         </div>
 
         <div class="p-6 space-y-6">
-            <!-- Account Information -->
-            <div class="bg-white rounded-2xl p-5 shadow-lg">
-                <h3 class="text-lg font-bold text-gray-800 mb-4">Informasi Akun</h3>
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center py-3 border-b border-gray-100">
-                        <span class="text-gray-600 text-sm">Email</span>
-                        <span id="account-email" class="text-gray-800 font-medium text-sm">Loading...</span>
-                    </div>
-                    <div class="flex justify-between items-center py-3 border-b border-gray-100">
-                        <span class="text-gray-600 text-sm">Tipe Akun</span>
-                        <span id="account-type" class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">Loading...</span>
-                    </div>
-                    <div class="flex justify-between items-center py-3 border-b border-gray-100">
-                        <span class="text-gray-600 text-sm">Bergabung Sejak</span>
-                        <span id="account-joined" class="text-gray-800 font-medium text-sm">Loading...</span>
-                    </div>
-                    <div class="flex justify-between items-center py-3">
-                        <span class="text-gray-600 text-sm">Status</span>
-                        <span id="account-status" class="flex items-center text-green-600 font-medium text-sm">
-                            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-                            Aktif
-                        </span>
-                    </div>
-                </div>
-            </div>
-
             <!-- Menu List -->
             <div class="bg-white rounded-2xl p-4 shadow-lg space-y-1">
+                <a href="account-info.html" class="flex items-center justify-between p-4 rounded-lg hover:bg-gray-50">
+                    <span class="font-medium text-gray-700">Informasi Akun</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
                 <a href="feedback-survey.html" class="flex items-center justify-between p-4 rounded-lg hover:bg-gray-50">
                     <span class="font-medium text-gray-700">Saran & Kritik</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><polyline points="9 18 15 12 9 6"/></svg>
@@ -181,59 +159,17 @@
                             '👤';
                         avatar.textContent = initials.length <= 2 ? initials : '👤';
                     }
-
-                    // Update account information (Real-time)
-                    // Email
-                    document.getElementById('account-email').textContent = userData.email || '-';
-
-                    // Tipe Akun with badge colors
-                    const accountTypeElement = document.getElementById('account-type');
-                    if (userData.role === 'admin') {
-                        accountTypeElement.textContent = 'Admin';
-                        accountTypeElement.className = 'px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium';
-                    } else {
-                        accountTypeElement.textContent = 'User';
-                        accountTypeElement.className = 'px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium';
-                    }
-
-                    // Bergabung Sejak
-                    if (userData.createdAt) {
-                        const joinDate = new Date(userData.createdAt);
-                        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-                        document.getElementById('account-joined').textContent = joinDate.toLocaleDateString('id-ID', options);
-                    } else {
-                        document.getElementById('account-joined').textContent = '-';
-                    }
-
-                    // Status is always "Aktif" when logged in
-                    document.getElementById('account-status').innerHTML = `
-                        <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-                        Aktif
-                    `;
                 } else {
                     // User is logged out
                     document.getElementById('profile-name').textContent = 'Guest User';
                     document.getElementById('profile-profession').textContent = 'Visitor';
                     document.getElementById('profile-avatar').textContent = '👤';
-
-                    // Update account info for logged out user
-                    document.getElementById('account-email').textContent = '-';
-                    document.getElementById('account-type').textContent = 'Guest';
-                    document.getElementById('account-type').className = 'px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium';
-                    document.getElementById('account-joined').textContent = '-';
-                    document.getElementById('account-status').innerHTML = `
-                        <span class="w-2 h-2 bg-gray-400 rounded-full mr-2"></span>
-                        Tidak Aktif
-                    `;
                 }
             } catch (error) {
                 console.error('Error updating user profile:', error);
                 // Fallback values
                 document.getElementById('profile-name').textContent = 'User';
                 document.getElementById('profile-profession').textContent = 'Tech Learner';
-                document.getElementById('account-email').textContent = 'Error loading data';
-                document.getElementById('account-type').textContent = '-';
-                document.getElementById('account-joined').textContent = '-';
             }
         }
     </script>
